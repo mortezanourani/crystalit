@@ -18,8 +18,9 @@ http://crystalit.ir/
 # Dependencies
 Project is created with:
 * Node.js version: 14.17.6
-* Express.js: 4.16.1
-* pug: 3.0.2
+* Express.js version: 4.16.1
+* MongoDB version: 4.1.3
+* pug view engine version: 3.0.2
 	
 # Setup
 To run this project, install it locally using npm:
