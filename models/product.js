@@ -1,3 +1,6 @@
+const Category = require('./category');
+const Property = require('./property');
+
 class Product {
   title = new String();
   categories = new Array(new Category());
@@ -7,19 +10,4 @@ class Product {
   discount = new Number();
 }
 
-class Category {
-  name = new String();
-  title = new String();
-}
-
-class Property {
-  name = new String();
-  title = new String();
-  unit = new String();
-}
-
-module.exports = {
-  Product,
-  Category,
-  Property,
-};
+module.exports = Product;

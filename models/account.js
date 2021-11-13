@@ -1,53 +1,46 @@
+const hash = require('md5');
+const Context = require('./context');
+const AccountRole = require('./role');
+const Information = require('./information')
+const Address = require('./address');
+
 class Account {
   username = new String();
   passwordHash = new String();
   role = new String();
   personalInfo = new Information();
   addresses = new Array(new Address());
-  verified = new Boolean();
+  verified = new Boolean(false);
+
+  constructor() {
+    this.username = '';
+    this.passwordHash = '';
+    this.role = AccountRole.User.name;
+    this.addresses = new Array(0);
+    this.verified = false;
+  }
+
+  async isTaken() {
+    const foundAccount = await Context.Account.findOne({ username: this.username });
+    if (foundAccount === null)
+      return false;
+    
+    return true;
+  }
+
+  isPasswordValid() {
+    let password = this.passwordHash;
+    if (password.length <= 8)
+      return false;
+    
+    this.passwordHash = hash(password);
+    return true;
+  }
+
+  async create() {
+    return await Context.Account.insertOne(this);
+  }
 }
 
-class Role {
-  name = new String();
-  title = new String();
-}
+module.exports = Account;
 
-const administrator = new Role();
-administrator.name = 'Administrator';
-administrator.title = 'مدیر';
-
-const manager = new Role();
-manager.name = 'Manager';
-manager.title = 'متصدی';
-
-const user = new Role();
-user.name = 'User';
-user.title = 'مشتری';
-
-const AccountRole = {
-  Administrator: administrator,
-  Manager: manager,
-  User: user,
-};
-
-class Information {
-  firstName = new String();
-  lastName = new String();
-  birthDate = new Date(0);
-  phoneNumbers = new Array(new Number());
-}
-
-class Address {
-  address = new String();
-  street = new String();
-  city = new String();
-  province = new String();
-  postalCode = new Number();
-}
-
-module.exports = {
-  Account,
-  AccountRole,
-  Information,
-  Address,
-};
