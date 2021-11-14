@@ -21,10 +21,12 @@ class Account {
   }
 
   async isTaken() {
-    const foundAccount = await Context.Account.findOne({ username: this.username });
+    const foundAccount = await Context.Account.findOne({
+      username: this.username,
+    });
     if (foundAccount === null)
       return false;
-    
+
     return true;
   }
 
@@ -32,13 +34,19 @@ class Account {
     let password = this.passwordHash;
     if (password.length <= 8)
       return false;
-    
+
     this.passwordHash = hash(password);
     return true;
   }
 
   async create() {
     return await Context.Account.insertOne(this);
+  }
+
+  isPasswordCorrect(password) {
+    let passworHash = hash(password);
+    let result = this.passwordHash === passworHash;
+    return result;
   }
 }
 

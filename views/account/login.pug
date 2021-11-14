@@ -1,0 +1,12 @@
+extends layout 
+
+block content 
+  h1= 'Login'
+  p #{message}
+  form(action="", method="post") 
+    p
+      input(type="email", name="username" placeholder="نام کاربری")
+    p
+      input(type="password", name="password" placeholder="رمز عبور")
+    p
+      input(type="submit", value="ورود")

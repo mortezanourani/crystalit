@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var accountRouter = require('./routes/account');
+const session = require('express-session');
 
 var app = express();
 
@@ -13,6 +14,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use(
+  session({
+    secret: 'crystal it',
+    saveUninitialized: true,
+    resave: true,
+  })
+);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
