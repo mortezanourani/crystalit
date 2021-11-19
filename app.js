@@ -29,8 +29,23 @@ app.use(
     resave: true,
   })
 );
+app.use(function (req, res, next) {
+  let messages = req.session.messages || [];
+  res.locals.message = messages;
+  res.locals.hasMessage = !!messages.length;
+  delete req.session.messages;
+  next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
 
 app.use('/', indexRouter);
 app.use('/account', accountRouter);
@@ -41,14 +56,21 @@ const md5 = require('md5');
 
 passport.use(
   'register',
-  new LocalStrategy(function (username, password, done) {
+  new LocalStrategy(async function (username, password, done) {
     let account = new Account();
-    account.username = username;
-    account.passwordHash = md5(password);
-    Context.Account.insertOne(account, function (err) {
-      if (err) return done(err);
-      return done(null, true);
-    });
+    let alreadyExists = await account.alreadyExists(username);
+    if (alreadyExists)
+      return done(null, false, { message: 'Username already exists.' });
+
+    let isPasswordValid = account.isPasswordValid(password);
+    if (!isPasswordValid)
+      return done(null, false, { message: 'Entered password is not valid.' });
+
+    let isCreated = await account.create(username, password);
+    if (!isCreated)
+      return done(null, false, { message: 'Something went wrong.' });
+    
+    return done(null, account);
   })
 );
 
@@ -68,14 +90,6 @@ passport.use(
     );
   })
 );
-
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function (user, done) {
-  done(null, user);
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

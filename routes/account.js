@@ -18,15 +18,19 @@ router.get('/register', function (req, res, next) {
   if (req.isAuthenticated())
     return res.redirect('/dashboard/');
   
-  res.render('account/register', { title: 'CrystalIT | Register' });
+  let message = res.locals.message;
+  res.render('account/register', { title: 'CrystalIT | Register', errorMessage: message });
 });
 
 /* POST Register proccess */
-router.post('/register',
-  passport.authenticate('register', { failureRedirect: '/account/register/' }),
-  function (req, res, next) {
-    res.redirect('/account/login/');
-});
+router.post(
+  '/register',
+  passport.authenticate('register', {
+    failureMessage: true,
+    failureRedirect: '/account/register/',
+    successRedirect: '/',
+  })
+);
 
 /* GET Login page. */
 router.get('/login', function (req, res, next) {

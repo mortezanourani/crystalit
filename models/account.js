@@ -20,30 +20,26 @@ class Account {
     this.verified = false;
   }
 
-  async isTaken() {
-    const foundAccount = await Context.Account.findOne({
-      username: this.username,
+  async alreadyExists(username) {
+    let account = await Context.Account.findOne({
+      username: username,
     });
-    if (foundAccount === null)
-      return false;
-
-    return true;
+    return !!account;
   }
 
-  isPasswordValid() {
-    let password = this.passwordHash;
-    if (password.length <= 8)
-      return false;
+  isPasswordValid(password) {
+    return password.length >= 8;
+  }
 
+  async create(username, password) {
+    this.username = username;
     this.passwordHash = hash(password);
-    return true;
+
+    let result = await Context.Account.insertOne(this);
+    return result.acknowledged;
   }
 
-  async create() {
-    return await Context.Account.insertOne(this);
-  }
-
-  isPasswordCorrect(password) {
+  #isPasswordCorrect(password) {
     let passworHash = hash(password);
     let result = this.passwordHash === passworHash;
     return result;

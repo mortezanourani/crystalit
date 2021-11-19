@@ -2,7 +2,12 @@ extends layout
 
 block content 
   h1= 'ثبت نام'
+  if(errorMessage)
+    p #{errorMessage}
   form(action="" method="post") 
-    input(type='text' name='username' placeholder='نام کاربری')
-    input(type='password' name='password' placeholder='رمز عبور')
+    p 
+      input(type='text' name='username' placeholder='نام کاربری')
+    p 
+      input(type='password' name='password' placeholder='رمز عبور')
+    
     input(type='submit')
