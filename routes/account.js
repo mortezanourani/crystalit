@@ -1,9 +1,6 @@
-var express = require('express');
-var router = express.Router();
-
-const Context = require('../models/context');
-const Account = require('../models/account');
+const express = require('express');
 const passport = require('passport');
+var router = express.Router();
 
 /* GET Account page. */
 router.get('/', function (req, res, next) {
@@ -19,7 +16,10 @@ router.get('/register', function (req, res, next) {
     return res.redirect('/dashboard/');
   
   let message = res.locals.message;
-  res.render('account/register', { title: 'CrystalIT | Register', errorMessage: message });
+  res.render('account/register', {
+    title: 'CrystalIT | Register',
+    errorMessage: message,
+  });
 });
 
 /* POST Register proccess */
@@ -37,18 +37,21 @@ router.get('/login', function (req, res, next) {
   if (req.isAuthenticated())
     return res.redirect('/dashboard/');
   
+  let message = res.locals.message;
   res.render('account/login', {
     title: 'CrystalIT | Login',
+    errorMessage: message,
   });
 });
 
 /* POST Login page. */
 router.post(
   '/login',
-  passport.authenticate('login', { failureRedirect: '/account/login/' }),
-  function (req, res, next) {
-    res.redirect('/dashboard/');
-  }
+  passport.authenticate('login', {
+    failureMessage: true,
+    failureRedirect: '/account/login/',
+    successRedirect: '/',
+  })
 );
 
 module.exports = router;

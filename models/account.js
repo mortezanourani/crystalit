@@ -1,3 +1,4 @@
+const uuid = require('uuid');
 const hash = require('md5');
 const Context = require('./context');
 const AccountRole = require('./role');
@@ -35,14 +36,13 @@ class Account {
     this.username = username;
     this.passwordHash = hash(password);
 
+    let accountId = uuid.v1()
+      .split('-')
+      .join('');
+    this._id = accountId;
+
     let result = await Context.Account.insertOne(this);
     return result.acknowledged;
-  }
-
-  #isPasswordCorrect(password) {
-    let passworHash = hash(password);
-    let result = this.passwordHash === passworHash;
-    return result;
   }
 }
 
