@@ -71,6 +71,17 @@ class Account {
       return false;
     return true;
   }
+
+  async updateInformation(account) {
+    let result = await Context.Account.updateOne(
+      { _id: this._id },
+      { $set: { personalInfo: account.personalInfo } }
+    );
+
+    if (!result)
+      return false;
+    return true;
+  }
 }
 
 module.exports = Account;

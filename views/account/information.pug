@@ -1,0 +1,22 @@
+extends layout 
+
+block content 
+  h1= 'Personal Information'
+  if(errorMessage)
+    p #{errorMessage}
+  
+  form(action="", method="post") 
+    p
+      input(type="text", name="firstname" placeholder="نام" value=firstName)
+    p
+      input(type="text", name="lastname" placeholder="نام خانوادگی" value=lastName)
+    p
+      input(type="date", name="birthdate" value=birthDate)
+    for phoneNumber in phoneNumbers
+      p
+        input(type="text", name="phonenumber" placeholder="شماره تماس" value=phoneNumber)
+    p
+      input(type="text", name="newPhonenumber" placeholder="شماره تماس")
+        
+    p
+      input(type="submit", value="ورود")

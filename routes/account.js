@@ -97,6 +97,50 @@ router.post('/changepassword', async function (req, res, next) {
   res.redirect('/account/changepassword/');
 })
 
+/* GET Information page */
+router.get('/information', function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let account = req.user;
+  let information = account.personalInfo;
+  let message = res.locals.message;
+
+  res.render('account/information', {
+    title: 'CrystaIT | Information',
+    firstName: information.firstName,
+    lastName: information.lastName,
+    birthDate: information.birthDate,
+    phoneNumbers: information.phoneNumbers,
+    errorMessage: message,
+  });
+});
+
+/* POST Information page */
+router.post('/information', async function (req, res, next) {
+  let account = new Account();
+  Object.assign(account, req.user);
+  let formCollection = req.body;
+  account.personalInfo.firstName = formCollection.firstname;
+  account.personalInfo.lastName = formCollection.lastname;
+  account.personalInfo.birthDate = formCollection.birthdate;
+  for (phoneNumber in formCollection.phoneNumber)
+    account.personalInfo.phoneNumbers.push(phoneNumber);
+  if (formCollection.newPhonenumber)
+    account.personalInfo.phoneNumbers.push(formCollection.newPhonenumber);
+  
+  let errorMessage = '';
+  let acknowledged = await account.updateInformation(account);
+  if (!acknowledged)
+    errorMessage = 'Something went wrong.';
+
+  if (errorMessage === '')
+    errorMessage = 'Personal information updated successfully.';
+  
+  req.session.messages = [errorMessage];
+  res.redirect('/account/information/');
+});
+
 /* Account Logout */
 router.get('/logout', function (req, res, next) {
   req.logout();
