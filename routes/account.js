@@ -97,4 +97,10 @@ router.post('/changepassword', async function (req, res, next) {
   res.redirect('/account/changepassword/');
 })
 
+/* Account Logout */
+router.get('/logout', function (req, res, next) {
+  req.logout();
+  res.redirect('/');
+});
+
 module.exports = router;
