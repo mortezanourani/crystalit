@@ -124,8 +124,18 @@ router.post('/information', async function (req, res, next) {
   account.personalInfo.firstName = formCollection.firstname;
   account.personalInfo.lastName = formCollection.lastname;
   account.personalInfo.birthDate = formCollection.birthdate;
-  for (phoneNumber in formCollection.phoneNumber)
-    account.personalInfo.phoneNumbers.push(phoneNumber);
+  account.personalInfo.phoneNumbers = new Array(0);
+  if (formCollection.phonenumber) {
+    if (typeof formCollection.phonenumber === 'object') {
+      formCollection.phonenumber.forEach((phoneNumber) => {
+        if(phoneNumber)
+          account.personalInfo.phoneNumbers.push(phoneNumber);
+      });
+    } else {
+      if(formCollection.phonenumber)
+        account.personalInfo.phoneNumbers.push(formCollection.phonenumber);
+    }
+  }
   if (formCollection.newPhonenumber)
     account.personalInfo.phoneNumbers.push(formCollection.newPhonenumber);
   
