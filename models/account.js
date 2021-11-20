@@ -60,6 +60,17 @@ class Account {
     let hashedPassword = hash(password);
     return (this.passwordHash === hashedPassword);
   }
+
+  async changePassword(newPassword) {
+    let result = await Context.Account.updateOne(
+      { _id: this._id },
+      { $set: { passwordHash: hash(newPassword) } }
+    );
+
+    if (!result)
+      return false;
+    return true;
+  }
 }
 
 module.exports = Account;

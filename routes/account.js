@@ -2,6 +2,8 @@ const express = require('express');
 const passport = require('passport');
 var router = express.Router();
 
+const Account = require('../models/account');
+
 /* GET Account page. */
 router.get('/', function (req, res, next) {
   if (req.isAuthenticated())
@@ -53,5 +55,46 @@ router.post(
     successRedirect: '/',
   })
 );
+
+/* GET Changepassword page */
+router.get('/changepassword', function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let message = res.locals.message;
+  res.render('account/changepassword', {
+    title: 'CrystaIT | Change Password',
+    errorMessage: message,
+  });
+});
+
+/* POST Changepassword page */
+router.post('/changepassword', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let account = new Account();
+  let formCollection = req.body;
+  let currentPassword = formCollection.password;
+  let newPassword = formCollection.newPassword;
+  Object.assign(account, req.user);
+
+  let errorMessage = '';
+  if (!account.isPasswordCorrect(currentPassword))
+    errorMessage = 'Current password is not correct.';
+  
+  if (!account.isPasswordValid(newPassword))
+    errorMessage = 'The new password is not strong enaugh.';
+
+  let acknowledged = await account.changePassword(newPassword);
+  if (!acknowledged)
+    errorMessage = 'Something went wrong.';
+  
+  if(errorMessage === '')
+    errorMessage = 'Passwrord changed successfully.';
+  
+  req.session.messages = [errorMessage];
+  res.redirect('/account/changepassword/');
+})
 
 module.exports = router;
