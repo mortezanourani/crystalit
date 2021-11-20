@@ -37,17 +37,20 @@ passport.use(
 
 passport.use(
   'login',
-  new LocalStrategy(function (username, password, done) {
-    Context.Account.findOne(
-      {
-        username: username,
-        passwordHash: hash(password),
-      },
-      function (err, user) {
-        if (err) return done(err);
-        if (!user) return done(null, false, { message: 'Username/Password is wrong.' });
-        return done(null, user);
-      }
-    );
+  new LocalStrategy(async function (username, password, done) {
+    let account = new Account();
+    let acknowledged = await account.findByUsername(username);
+    if (!acknowledged)
+      return done(null, false, {
+        message: 'There is no account with this username.',
+      });
+
+    let isPasswordCorrect = account.isPasswordCorrect(password);
+    if (!isPasswordCorrect)
+      return done(null, false, {
+        message: 'Username and Password is not matched.',
+      });
+
+    return done(null, account);
   })
 );

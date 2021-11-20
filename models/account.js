@@ -44,6 +44,22 @@ class Account {
     let result = await Context.Account.insertOne(this);
     return result.acknowledged;
   }
+
+  async findByUsername(username) {
+    let account = await Context.Account.findOne({
+      username: username,
+    });
+    if (!account)
+      return false;
+
+    Object.assign(this, account);
+    return true;
+  }
+
+  isPasswordCorrect(password) {
+    let hashedPassword = hash(password);
+    return (this.passwordHash === hashedPassword);
+  }
 }
 
 module.exports = Account;
