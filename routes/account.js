@@ -3,6 +3,7 @@ const passport = require('passport');
 var router = express.Router();
 
 const Account = require('../models/account');
+const Address = require('../models/address');
 
 /* GET Account page. */
 router.get('/', function (req, res, next) {
@@ -140,7 +141,7 @@ router.post('/information', async function (req, res, next) {
     account.personalInfo.phoneNumbers.push(formCollection.newPhonenumber);
   
   let errorMessage = '';
-  let acknowledged = await account.updateInformation(account);
+  let acknowledged = await account.updateInformation();
   if (!acknowledged)
     errorMessage = 'Something went wrong.';
 
@@ -149,6 +150,121 @@ router.post('/information', async function (req, res, next) {
   
   req.session.messages = [errorMessage];
   res.redirect('/account/information/');
+});
+
+/* GET Address page */
+router.get('/address', function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+
+  let account = req.user;
+  let addresses = account.addresses;
+  let message = res.locals.message;
+  
+  res.render('account/address', {
+    title: 'CrystaIT | Address',
+    addresses: addresses,
+    errorMessage: message,
+  });
+});
+
+/* GET Address add page */
+router.get('/address/add', function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  res.render('account/addressAdd.pug', {
+    title: 'Crystal IT | Add Address',
+  })
+});
+
+/* POST Address add page */
+router.post('/address/add', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let account = new Account();
+  Object.assign(account, req.user);
+  let address = new Address();
+  Object.assign(address, req.body);
+
+  let acknowledged = await account.addAddress(address);
+  if (!acknowledged)
+    errorMessage = 'Something went wrong.';
+  errorMessage = 'Address added successfully.';
+
+  res.redirect('/account/address/');
+});
+
+/* GET Address edit page */
+router.get('/address/:id', function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let account = req.user;
+  let address = new Address();
+  for (accountAddress of account.addresses) {
+    if (accountAddress.id != req.params.id)
+      continue;
+    address = accountAddress;
+  }
+  
+  res.render('account/addressUpdate', {
+    title: 'Crystal IT | Edit Address',
+    address: address,
+  })
+})
+
+/* POST Address edit page */
+router.post('/address/:id', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let account = new Account();
+  Object.assign(account, req.user);
+  let address = new Address();
+  address.id = req.params.id;
+  Object.assign(address, req.body);
+  let addresses = new Array(0);
+  for (accountAddress of account.addresses) {
+    if (accountAddress.id != address.id) {
+      addresses.push(accountAddress);
+      continue;
+    }
+    addresses.push(address);
+  }
+  account.addresses = addresses;
+  
+  let acknowledged = await account.updateAddress();
+  if (!acknowledged)
+    errorMessage = 'Something went wrong.';
+  errorMessage = 'Address updated successfully.';
+
+  res.redirect('/account/address/');
+});
+
+/* Address remove */
+router.get('/address/remove/:id', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let account = new Account();
+  Object.assign(account, req.user);
+  let addressId = req.params.id;
+  let addresses = new Array(0);
+  for (accountAddress of account.addresses) {
+    if (accountAddress.id === addressId)
+      continue;
+    addresses.push(accountAddress);
+  }
+  account.addresses = addresses;
+
+  let acknowledged = await account.updateAddress();
+  if (!acknowledged)
+    errorMessage = 'Something went wrong.';
+  errorMessage = 'Address updated successfully.';
+
+  res.redirect('/account/address/');
 });
 
 /* Account Logout */

@@ -1,0 +1,16 @@
+extends layout 
+
+block content 
+  h1= 'Addresses'
+  if(errorMessage)
+    p #{errorMessage}
+
+  if(addresses.length >= 1)
+    for address of addresses
+      p
+        a(href="/account/address/" + address.id) #{address.province}, #{address.city}, #{address.street}, #{address.address}, کدپستی #{address.postalCode}
+  else
+    p هنوز آدرسی ثبت نکرده اید.
+
+  p آیا مایلید آدرس جدیدی ثبت نمایید؟
+  a(href="/account/address/add/") اضافه کردن آدرس

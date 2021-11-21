@@ -1,0 +1,21 @@
+extends layout 
+
+block content 
+  h1= 'Addresses'
+  if(errorMessage)
+    p #{errorMessage}
+
+  form(action="", method="post") 
+    p 
+      input(type="text", name="province", placeholder="استان")
+    p 
+      input(type="text", name="city", placeholder="شهر")
+    p 
+      input(type="text", name="street", placeholder="خیابان")
+    p 
+      input(type="text", name="address", placeholder="کوچه، پلاک، واحد")
+    p 
+      input(type="text", name="postalCode", placeholder="کد پستی")
+
+    p 
+      input(type="submit", value="اضافه کردن آدرس")
