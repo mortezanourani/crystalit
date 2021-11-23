@@ -1,0 +1,19 @@
+extends layout 
+
+block content 
+  h1 ویرایش ویژگی
+
+  form(action="", method="post") 
+    p 
+      input(type="text", name="name", placeholder="نام انگلیسی جهت ایجاد فیلتر", value=property.name)
+    p 
+      input(type="text", name="title", placeholder="عنوان", value=property.title)
+    p 
+      input(type="text", name="unit", placeholder="واحد اندازه گیری", value=property.unit)
+
+    p 
+      a(href="/dashboard/property/remove/" + property._id)
+        input(type="button", value="حذف")
+      
+      input(type="submit", value="به روز رسانی")
+      

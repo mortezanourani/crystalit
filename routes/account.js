@@ -53,7 +53,7 @@ router.post(
   passport.authenticate('login', {
     failureMessage: true,
     failureRedirect: '/account/login/',
-    successRedirect: '/',
+    successRedirect: '/dashboard/',
   })
 );
 

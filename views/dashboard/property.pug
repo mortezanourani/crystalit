@@ -1,0 +1,17 @@
+extends layout 
+
+block content 
+  h1 ویژگی ها
+  
+  if(message)
+    p #{message}
+
+  if(properties.length >= 1)
+    for property of properties
+      p
+        a(href="/dashboard/property/" + property._id) #{property.name}
+  else
+    p هنوز ویژگی ای اضافه نکرده اید.
+
+  p آیا مایلید ویژگی جدیدی برای مشخصات محصولاتتان ایجاد نمایید؟
+  a(href="/dashboard/property/add/") ایجاد ویژگی جدید  
