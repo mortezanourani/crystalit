@@ -27,6 +27,19 @@ class Product {
     return products;
   }
 
+  async findSome(category) {
+    let currentCategory = new Category();
+    currentCategory = await Context.Category.findOne({
+      name: category
+    });
+    delete currentCategory._id;
+    
+    let products = await Context.Product.find({
+      categories: { $in: [currentCategory] }
+    }).toArray();
+    return products;
+  }
+
   async find() {
     let product = await Context.Product.findOne({
       _id: this._id,
