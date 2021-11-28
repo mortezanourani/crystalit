@@ -2,10 +2,22 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
 
-  p
-    a(href="/account/login/") ورود به حساب کاربری
+  div
+    p
+      a(href="/account/login/") ورود به حساب کاربری
 
-  p
-    a(href="/account/register/") ثبت نام
+    p
+      a(href="/account/register/") ثبت نام
+
+  for product of products
+    div 
+      button 
+        a(href="/product/" + product._id)  
+          h3= product.title
+          p= product.price 
+          p= '-' + product.discount + '%'
+          p= product.price*((1-(product.discount/100)))
+        for productCategory of product.categories 
+          p
+            a(href="/category/" + productCategory.name)= productCategory.title

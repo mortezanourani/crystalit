@@ -346,9 +346,6 @@ router.post('/product/:id', async function (req, res, next) {
   if (product.properties.length === 0)
     delete product.properties;
 
-  console.clear();
-  console.log(product);
-  
   let acknowledged = await product.update();
   let message = 'Product updated successfully.';
   if (!acknowledged) message = 'Something went wrong.';

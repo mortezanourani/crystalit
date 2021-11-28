@@ -69,7 +69,6 @@ class Product {
     if (!set.images)
       set.images = new Array(0);
     
-    console.log(set);
     let result = await Context.Product.updateOne(
       { _id: this._id },
       { $set: set }
