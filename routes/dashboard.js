@@ -3,6 +3,7 @@ var router = express.Router();
 
 const Category = require('../models/category');
 const Property = require('../models/property');
+const Product = require('../models/product');
 
 /* GET Dashboard page. */
 router.get('/', function (req, res, next) {
@@ -66,7 +67,7 @@ router.get('/category/:id', async function (req, res, next) {
   category._id = req.params.id;
   await category.find();
   res.render('dashboard/categoryUpdate', {
-    title: 'CrytsalIT | Create Category',
+    title: 'CrytsalIT | Edit Category',
     category: category,
   });
 });
@@ -157,7 +158,7 @@ router.get('/property/:id', async function (req, res, next) {
   property._id = req.params.id;
   await property.find();
   res.render('dashboard/propertyUpdate', {
-    title: 'CrytsalIT | Create Property',
+    title: 'CrytsalIT | Edit Property',
     property: property,
   });
 });
@@ -194,6 +195,182 @@ router.get('/property/remove/:id', async function (req, res, next) {
   
   req.session.messages = [message];
   res.redirect('/dashboard/property/');
+});
+
+/* GET Product page. */
+router.get('/product', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+    
+  let message = res.locals.message;
+  let product = new Product();
+  let products = new Array(0);
+  products = await product.findAll();
+
+  res.render('dashboard/product', {
+    title: 'CrytsalIT | Products',
+    products: products,
+    message: message,
+  });
+});
+
+/* GET Product create page. */
+router.get('/product/add', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+    
+  let category = new Category();
+  let categories = new Array(0);
+  categories = await category.findAll();
+
+  let property = new Property();
+  let properties = new Array(0);
+  properties = await property.findAll();
+
+  res.render('dashboard/productAdd', {
+    title: 'CrytsalIT | Create Product',
+    categories: categories,
+    properties: properties,
+  });
+});
+
+/* POST Product create page. */
+router.post('/product/add', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let formCollection = req.body;
+
+  let product = new Product();
+  product.title = formCollection.title;
+  product.count = formCollection.count;
+  product.price = formCollection.price;
+  product.discount = formCollection.discount;
+  
+  let categories = [];
+  if (typeof formCollection.categories !== 'object')
+    formCollection.categories = [formCollection.categories];
+  for (formCategory of formCollection.categories) {
+    let category = new Category();
+    category._id = formCategory;
+    await category.find();
+    delete category._id;
+    categories.push(category);
+  }
+  product.categories = categories;
+  if (product.categories[0].name === '')
+    delete product.categories;
+
+  let property = new Property();
+  let properties = await property.findAll();
+  for (let property of properties) {
+    if (formCollection[property.name] === '')
+      continue;
+    delete property._id;
+    property.value = formCollection[property.name];
+    product.properties.push(property);
+  }
+  if (product.properties.length === 0)
+    delete product.properties;
+  
+  let acknowledged = await product.create();
+  let message = 'Product created successfully.'
+  if (!acknowledged)
+    message = 'Something went wrong.';
+  
+  req.session.messages = [message];
+  res.redirect('/dashboard/product/');
+});
+
+/* GET Product update page. */
+router.get('/product/:id', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+    
+  let category = new Category();
+  let categories = new Array(0);
+  categories = await category.findAll();
+
+  let property = new Property();
+  let properties = new Array(0);
+  properties = await property.findAll();
+
+  let product = new Product();
+  product._id = req.params.id;
+  await product.find();
+  res.render('dashboard/productUpdate', {
+    title: 'CrytsalIT | Edit Product',
+    categories: categories,
+    properties: properties,
+    product: product,
+  });
+});
+
+/* POST Product update page. */
+router.post('/product/:id', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let formCollection = req.body;
+
+  let product = new Product();
+  product._id = req.params.id;
+  product.title = formCollection.title;
+  product.count = formCollection.count;
+  product.price = formCollection.price;
+  product.discount = formCollection.discount;
+
+  let categories = [];
+  if (typeof formCollection.categories !== 'object')
+    formCollection.categories = [formCollection.categories];
+  for (formCategory of formCollection.categories) {
+    let category = new Category();
+    category._id = formCategory;
+    await category.find();
+    delete category._id;
+    categories.push(category);
+  }
+  product.categories = categories;
+  if (product.categories[0].name === '')
+    delete product.categories;
+
+  let property = new Property();
+  let properties = await property.findAll();
+  for (let property of properties) {
+    if (formCollection[property.name] === '')
+      continue;
+    delete property._id;
+    property.value = formCollection[property.name];
+    product.properties.push(property);
+  }
+  if (product.properties.length === 0)
+    delete product.properties;
+
+  console.clear();
+  console.log(product);
+  
+  let acknowledged = await product.update();
+  let message = 'Product updated successfully.';
+  if (!acknowledged) message = 'Something went wrong.';
+
+  req.session.messages = [message];
+  res.redirect('/dashboard/product/');
+});
+
+/* Product remove process */
+router.get('/product/remove/:id', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let product = new Product();
+  product._id = req.params.id;
+  let acknowledged = await product.remove();
+  message = 'Product removed successfully.';
+  if (!acknowledged)
+    message = 'Something went wrong.';
+  
+  req.session.messages = [message];
+  res.redirect('/dashboard/product/');
 });
 
 module.exports = router;

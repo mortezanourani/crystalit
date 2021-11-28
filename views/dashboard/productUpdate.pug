@@ -1,0 +1,48 @@
+extends layout 
+
+block content 
+  h1 ویرایش محصول جدید
+
+  form(action="", method="post") 
+    p 
+      input(type="text", name="title", placeholder="عنوان", value= product.title)
+    
+    p دسته بندی های محصول
+    for category in categories
+      p 
+        - var checked = false
+        if(product.categories)
+          for productCategory of product.categories 
+            if(category.name === productCategory.name)
+              - checked = true
+              - break
+        if(checked)
+          input(type="checkbox", name="categories", id=category.name, value=category._id, checked)
+        else 
+          input(type="checkbox", name="categories", id=category.name, value=category._id)
+        label(for=category.name) #{category.title}
+    
+    p ویژگی های محصول
+    for property in properties
+      p 
+        label= property.title + ': '
+        - var value = ''
+        if(product.properties)
+        for productProperty of product.properties
+          if(property.name === productProperty.name)
+            - value = productProperty.value
+            - break
+        
+        input(type= "text", name= property.name, placeholder= "مقدار به " + property.unit, value= value)
+
+    p 
+      input(type="text", name="count", placeholder="تعداد موجود در انبار", value=product.count)
+
+    p 
+      input(type="text", name="price", placeholder="قیمت محصول (تومان)", value=product.price)
+
+    p 
+      input(type="text", name="discount", placeholder="تخفیف (درصد)", value=product.discount)
+
+    p 
+      input(type="submit", value="به روز رسانی محصول")

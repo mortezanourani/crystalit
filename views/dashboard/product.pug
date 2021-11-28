@@ -1,0 +1,19 @@
+extends layout 
+
+block content 
+  h1 محصولات
+  
+  if(message)
+    p #{message}
+
+  if(products.length >= 1)
+    for product of products
+      p
+        a(href="/dashboard/product/" + product._id) #{product.title}
+        span 
+          a(href="/dashboard/product/remove/" + product._id) حذف
+  else
+    p هنوز محصولی اضافه نکرده اید.
+
+  p آیا مایلید محصولات خود را جهت نمایش در فروشگاه اضافه نمایید؟
+  a(href="/dashboard/product/add/") اضافه کردن محصول  

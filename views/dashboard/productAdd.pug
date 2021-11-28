@@ -1,0 +1,32 @@
+extends layout 
+
+block content 
+  h1 اضافه کردن محصول جدید
+
+  form(action="", method="post") 
+    p 
+      input(type="text", name="title", placeholder="عنوان")
+    
+    p دسته بندی های محصول
+    for category in categories
+      p 
+        input(type="checkbox", name="categories", id=category.name, value=category._id) 
+        label(for=category.name) #{category.title}
+    
+    p ویژگی های محصول
+    for property in properties
+      p 
+        label= property.title + ': '
+        input(type= "text", name= property.name, placeholder= "مقدار به " + property.unit)
+    
+    p 
+      input(type="text", name="count", placeholder="تعداد موجود در انبار")
+
+    p 
+      input(type="text", name="price", placeholder="قیمت محصول (تومان)")
+
+    p 
+      input(type="text", name="discount", placeholder="تخفیف (درصد)")
+
+    p 
+      input(type="submit", value="اضافه کردن محصول")
