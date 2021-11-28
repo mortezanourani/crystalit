@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+
+  div 
+    img(src=product.images[0])
+    h2= product.title 
+
+    p= "قیمت: " + product.price 
+    p= "تخفیف: " + product.discount + "%"
+    p= "قیمت قابل پرداخت: " + product.price*((1-(product.discount/100)))
+    for productCategory of product.categories 
+      span 
+        a(href="/category/" + productCategory.name)= productCategory.title 

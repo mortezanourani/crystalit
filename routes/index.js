@@ -25,4 +25,15 @@ router.get('/category/:id', async function (req, res, next) {
   });
 });
 
+/* GET specific product page */
+router.get('/product/:id', async function (req, res, next) {
+  let product = new Product();
+  product._id = req.params.id;
+  await product.find();
+  res.render('product', {
+    title: 'CrystalIT | Shop',
+    product: product,
+  });
+});
+
 module.exports = router;
