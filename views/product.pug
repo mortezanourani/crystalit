@@ -13,3 +13,9 @@ block content
     for productCategory of product.categories 
       span 
         a(href="/category/" + productCategory.name)= productCategory.title 
+      
+    p
+      a(href="/cart/add/" + product._id) افزودن به سبد خرید
+
+    for item of cart 
+      p= item.title
