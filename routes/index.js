@@ -32,14 +32,9 @@ router.get('/product/:id', async function (req, res, next) {
   product._id = req.params.id;
   await product.find();
 
-  let cart = req.session.cart;
-  console.log(cart);
-  if (!cart)
-    cart = [];
   res.render('product', {
     title: 'CrystalIT | Shop',
     product: product,
-    cart: cart,
   });
 });
 
@@ -51,13 +46,31 @@ router.get('/cart/add/:id', async function (req, res, next) {
 
   let item = new Item(product);
 
-  let cart = req.session.cart;
-  if (typeof cart !== 'object')
-    cart = [];
-  cart.push(item);
+  let cart = req.session.cart || {};
+  cart[product._id] = item;
+  req.session.cart = cart;
+
+  return res.redirect('/product/' + product._id);
+});
+
+/* GET cart page */
+router.get('/cart', function (req, res, next) {
+  let cart = req.session.cart || {};
+  
+  res.render('cart', {
+    title: "CrystalIT | Cart",
+    cart: cart,
+  })
+});
+
+/* GET remove product from cart */
+router.get('/cart/remove/:id', function (req, res, next) {
+  let cart = req.session.cart || {};
+  let productId = req.params.id;
+  delete cart[productId];
   req.session.cart = cart;
   
-  return res.redirect('/product/' + product._id);
+  return res.redirect('/cart/');
 });
 
 module.exports = router;
