@@ -13,6 +13,19 @@ class Order {
   discount = new Number();
   status = new Array(0);
 
+  async findAll(userId) {
+    let result;
+    if (!userId)
+      result = await Context.Order.find({}).toArray();
+    else
+      result = await Context.Order.find({
+        accountId: userId,
+      }).toArray();
+    
+    console.log(result);
+    return result;
+  }
+
   async save() {
     let orderId = uuid.v1()
       .split('-')

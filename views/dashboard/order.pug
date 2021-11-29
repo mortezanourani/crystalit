@@ -1,0 +1,10 @@
+extends layout 
+
+block content 
+  h1 سابقه سفارشات
+  
+  if(message)
+    p #{message}
+
+  for order of orders
+    a(href="/dashboard/order/" + order._id)= order._id

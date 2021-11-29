@@ -386,7 +386,8 @@ router.post('/order/add/', async function (req, res, next) {
   for (item in cart)
     order.items.push(cart[item]);
   order.phoneNumber = formCollection.phone;
-  order.status = Status.Submitted;
+  Status.Submitted.time = new Date();
+  order.status = [Status.Submitted];
 
   let acknowledged = await order.save();
   message = 'Order submitted successfully.';
@@ -396,6 +397,20 @@ router.post('/order/add/', async function (req, res, next) {
   delete req.session.cart;
   req.session.messages = [message];
   res.redirect('/dashboard/order/');
+});
+
+/* GET order page */
+router.get('/order', async function (req, res, next) {
+  if (!req.isAuthenticated())
+    res.redirect('/account/login/');
+  
+  let order = new Order();
+  let orders = await order.findAll(req.user._id);
+
+  res.render('dashboard/order', {
+    title: "CrystalIT | Orders",
+    orders: orders,
+  });
 });
 
 module.exports = router;
