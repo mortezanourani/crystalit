@@ -39,4 +39,18 @@ router.get('/remove/:id', function (req, res, next) {
   return res.redirect('/cart/');
 });
 
+/* GET cart checkout page */
+router.get('/checkout/', function (req, res, next) {
+  if (!req.isAuthenticated())
+    return res.redirect('/account/login/');
+  
+  let user = req.user;
+  let cart = req.session.cart || {};
+  res.render('cart/checkout', {
+    title: "CrystalIT | Cart Checkout",
+    user: user,
+    cart: cart,
+  });
+});
+
 module.exports = router;

@@ -4,6 +4,8 @@ var router = express.Router();
 const Category = require('../models/category');
 const Property = require('../models/property');
 const Product = require('../models/product');
+const Order = require('../models/order');
+const Status = require('../models/status');
 
 /* GET Dashboard page. */
 router.get('/', function (req, res, next) {
@@ -368,6 +370,32 @@ router.get('/product/remove/:id', async function (req, res, next) {
   
   req.session.messages = [message];
   res.redirect('/dashboard/product/');
+});
+
+/* POST create order */
+router.post('/order/add/', async function (req, res, next) {
+  let order = new Order();
+
+  let user = req.user;
+  let formCollection = req.body;
+  let cart = req.session.cart;
+
+  order.accountId = user._id;
+  order.address = JSON.parse(formCollection.address);
+  order.discount = formCollection.discount;
+  for (item in cart)
+    order.items.push(cart[item]);
+  order.phoneNumber = formCollection.phone;
+  order.status = Status.Submitted;
+
+  let acknowledged = await order.save();
+  message = 'Order submitted successfully.';
+  if (!acknowledged)
+    message = 'Something went wrong.';
+  
+  delete req.session.cart;
+  req.session.messages = [message];
+  res.redirect('/dashboard/order/');
 });
 
 module.exports = router;

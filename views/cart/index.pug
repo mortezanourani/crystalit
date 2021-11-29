@@ -10,3 +10,6 @@ block content
         td(style="color: red")= item.price*((100-item.discount)/100) + " تومان"
         td
           a(href="/cart/remove/" + item.productId) حذف
+    
+  p 
+    a(href="/cart/checkout/") ادامه فرآیند ثبت سفارش

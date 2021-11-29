@@ -31,7 +31,4 @@ const OrderStatus = {
   Done: done,
 };
 
-module.exports = {
-  Status,
-  OrderStatus,
-}
+module.exports = OrderStatus;
