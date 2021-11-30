@@ -7,11 +7,15 @@ const Product = require('../models/product');
 const Order = require('../models/order');
 const Status = require('../models/status');
 
-/* GET Dashboard page. */
-router.get('/', function (req, res, next) {
+router.use(function (req, res, next) {
   if (!req.isAuthenticated())
     return res.redirect('/account/login/');
   
+  next();
+});
+
+/* GET Dashboard page. */
+router.get('/', function (req, res, next) {
   res.render('dashboard/index', {
     title: 'CrystalIT | Dashboard'
   });
@@ -19,9 +23,6 @@ router.get('/', function (req, res, next) {
 
 /* GET Category page. */
 router.get('/category', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
   let message = res.locals.message;
   let category = new Category();
   let categories = new Array(0);
@@ -34,37 +35,27 @@ router.get('/category', async function (req, res, next) {
 });
 
 /* GET Category create page. */
-router.get('/category/add', function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
-  res.render('dashboard/categoryAdd', {
-    title: 'CrytsalIT | Create Category',
-  });
-});
+router
+  .route('/category/add')
+  .get(function (req, res, next) {
+    res.render('dashboard/categoryAdd', {
+      title: 'CrytsalIT | Create Category',
+    });
+  })
+  .post(async function (req, res, next) {
+    let category = new Category();
+    let formCollection = req.body;
+    Object.assign(category, formCollection);
+    let acknowledged = await category.create();
+    let message = 'Category created successfully.';
+    if (!acknowledged) message = 'Something went wrong.';
 
-/* POST Category create page. */
-router.post('/category/add', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
-  let category = new Category();
-  let formCollection = req.body;
-  Object.assign(category, formCollection);
-  let acknowledged = await category.create();
-  let message = 'Category created successfully.'
-  if (!acknowledged)
-    message = 'Something went wrong.';
-  
-  req.session.messages = [message];
-  res.redirect('/dashboard/category/');
-});
+    req.session.messages = [message];
+    res.redirect('/dashboard/category/');
+  });
 
 /* GET Category update page. */
 router.get('/category/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
   let category = new Category();
   category._id = req.params.id;
   await category.find();
@@ -76,9 +67,6 @@ router.get('/category/:id', async function (req, res, next) {
 
 /* POST Category update page. */
 router.post('/category/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
   let category = new Category();
   category._id = req.params.id;
   let formCollection = req.body;
@@ -94,9 +82,6 @@ router.post('/category/:id', async function (req, res, next) {
 
 /* Category remove process */
 router.get('/category/remove/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
   let category = new Category();
   category._id = req.params.id;
   let acknowledged = await category.remove();
@@ -110,9 +95,6 @@ router.get('/category/remove/:id', async function (req, res, next) {
 
 /* GET Property page. */
 router.get('/property', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
   let message = res.locals.message;
   let property = new Property();
   let properties = new Array(0);
@@ -126,9 +108,6 @@ router.get('/property', async function (req, res, next) {
 
 /* GET Property create page. */
 router.get('/property/add', function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
   res.render('dashboard/propertyAdd', {
     title: 'CrytsalIT | Create Property',
   });
@@ -136,9 +115,6 @@ router.get('/property/add', function (req, res, next) {
 
 /* POST Property create page. */
 router.post('/property/add', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
   let property = new Property();
   let formCollection = req.body;
   Object.assign(property, formCollection);
@@ -153,9 +129,6 @@ router.post('/property/add', async function (req, res, next) {
 
 /* GET Property update page. */
 router.get('/property/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
   let property = new Property();
   property._id = req.params.id;
   await property.find();
@@ -167,9 +140,6 @@ router.get('/property/:id', async function (req, res, next) {
 
 /* POST Property update page. */
 router.post('/property/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
   let property = new Property();
   property._id = req.params.id;
   let formCollection = req.body;
@@ -185,9 +155,6 @@ router.post('/property/:id', async function (req, res, next) {
 
 /* Property remove process */
 router.get('/property/remove/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
   let property = new Property();
   property._id = req.params.id;
   let acknowledged = await property.remove();
@@ -201,9 +168,6 @@ router.get('/property/remove/:id', async function (req, res, next) {
 
 /* GET Product page. */
 router.get('/product', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
   let message = res.locals.message;
   let product = new Product();
   let products = new Array(0);
@@ -218,9 +182,6 @@ router.get('/product', async function (req, res, next) {
 
 /* GET Product create page. */
 router.get('/product/add', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
   let category = new Category();
   let categories = new Array(0);
   categories = await category.findAll();
@@ -238,9 +199,6 @@ router.get('/product/add', async function (req, res, next) {
 
 /* POST Product create page. */
 router.post('/product/add', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
   let formCollection = req.body;
 
   let product = new Product();
@@ -286,9 +244,6 @@ router.post('/product/add', async function (req, res, next) {
 
 /* GET Product update page. */
 router.get('/product/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-    
   let category = new Category();
   let categories = new Array(0);
   categories = await category.findAll();
@@ -310,9 +265,6 @@ router.get('/product/:id', async function (req, res, next) {
 
 /* POST Product update page. */
 router.post('/product/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
   let formCollection = req.body;
 
   let product = new Product();
@@ -358,9 +310,6 @@ router.post('/product/:id', async function (req, res, next) {
 
 /* Product remove process */
 router.get('/product/remove/:id', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
   let product = new Product();
   product._id = req.params.id;
   let acknowledged = await product.remove();
@@ -401,9 +350,6 @@ router.post('/order/add/', async function (req, res, next) {
 
 /* GET order page */
 router.get('/order', async function (req, res, next) {
-  if (!req.isAuthenticated())
-    res.redirect('/account/login/');
-  
   let order = new Order();
   let orders = await order.findAll(req.user._id);
 
