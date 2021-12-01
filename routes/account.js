@@ -36,16 +36,18 @@ router.post(
 );
 
 /* GET Login page. */
-// router.get('/login', function (req, res, next) {
-//   if (req.isAuthenticated()) return res.redirect('/dashboard/');
+router.get('/login', function (req, res, next) {
+  if (req.isAuthenticated())
+    return res.redirect('/dashboard/');
 
-//   let message = res.locals.message;
-//   res.render('account/login', {
-//     title: 'CrystalIT | Login',
-//     errorMessage: message,
-//   });
-// });
+  let message = res.locals.message;
+  res.render('account/login', {
+    title: 'CrystalIT | Login',
+    errorMessage: message,
+  });
+});
 
+/*
 router.get('/login', passport.authenticate('google', { scope: ['profile'] }));
 
 router.get('/login/success',
@@ -54,7 +56,7 @@ router.get('/login/success',
     successRedirect: '/dashboard/',
   })
 );
-
+*/
 
 /* POST Login page. */
 router.post(
