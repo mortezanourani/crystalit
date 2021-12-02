@@ -4,8 +4,14 @@ var router = express.Router();
 const Product = require('../models/product');
 const Item = require('../models/item');
 
+router.use(function (req, res, next) {
+  const Models = req.context.models;
+  console.clear();
+  console.log(Models.Product);
+});
+
 /* GET home page. */
-router.get('/', async function(req, res, next) {
+router.get('/', async function (req, res, next) {
   let product = new Product();
   let products = await product.findAll();
 

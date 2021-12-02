@@ -1,7 +1,6 @@
 const uuid = require('uuid');
 const Category = require('./category');
 const Property = require('./property');
-const Context = require('./context');
 
 class Product {
   title = new String();
@@ -22,7 +21,7 @@ class Product {
     this.discount = 0;
   }
 
-  async findAll() {
+  static async findAll() {
     let products = await Context.Product.find({}).toArray();
     return products;
   }
@@ -98,4 +97,4 @@ class Product {
   }
 }
 
-module.exports = Product;
+module.exports = () => Product;

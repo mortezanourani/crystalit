@@ -1,7 +1,13 @@
 const Address = require('./address');
 const Item = require('./item');
-const Status = require('./status');
-const Context = require('./context');
+
+const Status = {
+  Submitted: { step: 1, title: 'در انتظار پرداخت' },
+  Paid: { step: 2, title: 'پرداخت شده' },
+  Preparing: { step: 3, title: 'در حال آماده سازی سفارش' },
+  Sent: { step: 4, title: 'ارسال شده' },
+  Done: { step: 5, title: 'تحویل شده' },
+};
 
 const uuid = require('uuid');
 
@@ -37,4 +43,4 @@ class Order {
   }
 }
 
-module.exports = Order;
+module.exports = () => Order;

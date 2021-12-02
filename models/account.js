@@ -1,14 +1,18 @@
 const uuid = require('uuid');
 const hash = require('md5');
-const Context = require('./context');
-const AccountRole = require('./role');
 const Information = require('./information')
 const Address = require('./address');
+
+const Role = {
+  Administrator: { name: 'Administrator', title: 'مدیر' },
+  Manager: { name: 'Manager', title: 'متصدی' },
+  User: { name: 'User', title: 'مشتری' },
+};
 
 class Account {
   username = new String();
   passwordHash = new String();
-  role = new String();
+  role = new Object();
   personalInfo = new Information();
   addresses = new Array(new Address());
   verified = new Boolean(false);
@@ -16,7 +20,7 @@ class Account {
   constructor() {
     this.username = '';
     this.passwordHash = '';
-    this.role = AccountRole.User.name;
+    this.role = Role.User;
     this.addresses = new Array(0);
     this.verified = false;
   }
@@ -112,5 +116,5 @@ class Account {
   }
 }
 
-module.exports = Account;
+module.exports = () => Account;
 

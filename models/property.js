@@ -1,5 +1,4 @@
 const uuid = require('uuid');
-const Context = require('./context');
 
 class Property {
   name = new String();
@@ -53,4 +52,4 @@ class Property {
   }
 }
 
-module.exports = Property;
+module.exports = () => Property;

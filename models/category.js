@@ -1,5 +1,4 @@
 const uuid = require('uuid');
-const Context = require('./context');
 
 class Category {
   name = new String();
@@ -54,4 +53,4 @@ class Category {
   }
 }
 
-module.exports = Category;
+module.exports = () => Category;

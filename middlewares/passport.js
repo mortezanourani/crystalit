@@ -1,6 +1,5 @@
 const passport = require('passport');
 const Account = require('../models/account');
-const Context = require('../models/context');
 const hash = require('md5');
 
 /*

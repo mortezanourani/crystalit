@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const injection = require('./middlewares/injectContext');
+
 const session = require('express-session');
 const passport = require('passport');
 
@@ -24,6 +26,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// initialize the context
+app.use(function (req, res, next) {
+  if (!req.context)
+    req.context = {};
+  
+  next();
+});
+
+app.use(injection);
+
 app.use(
   session({
     secret: 'crystal it',
@@ -32,7 +44,7 @@ app.use(
   })
 );
 
-require('./config/passport');
+require('./middlewares/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 

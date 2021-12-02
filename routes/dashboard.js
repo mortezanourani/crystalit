@@ -5,7 +5,6 @@ const Category = require('../models/category');
 const Property = require('../models/property');
 const Product = require('../models/product');
 const Order = require('../models/order');
-const Status = require('../models/status');
 
 router.use(function (req, res, next) {
   if (!req.isAuthenticated())
