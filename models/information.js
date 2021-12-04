@@ -11,4 +11,4 @@ class Information {
   }
 }
 
-module.exports = () => Information;
+module.exports = Information;

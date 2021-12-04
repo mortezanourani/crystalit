@@ -3,70 +3,60 @@ const passport = require('passport');
 var router = express.Router();
 
 const Account = require('../models/account');
-const Address = require('../models/address');
+
+router
+  .route(['/', '/register', '/login'])
+  .get((req, res, next) => {
+    if (req.isAuthenticated())
+      return res.redirect('/dashboard/');
+    next();
+  });
 
 /* GET Account page. */
-router.get('/', function (req, res, next) {
-  if (req.isAuthenticated())
-    return res.redirect('/dashboard/');
-  
-  res.redirect('/account/login/');
-});
-
-/* GET Register page. */
-router.get('/register', function (req, res, next) {
-  if (req.isAuthenticated())
-    return res.redirect('/dashboard/');
-  
-  let message = res.locals.message;
-  res.render('account/register', {
-    title: 'CrystalIT | Register',
-    errorMessage: message,
+router
+  .get('/', (req, res) => {
+    if (req.isAuthenticated())
+      return res.redirect('/dashboard/');
+    res.redirect('/account/login/');
   });
-});
 
-/* POST Register proccess */
-router.post(
-  '/register',
-  passport.authenticate('register', {
-    failureMessage: true,
-    failureRedirect: '/account/register/',
-    successRedirect: '/',
+/* ROUTE Register page. */
+router
+  .route('/register')
+  .get((req, res) => {
+    let message = res.locals.message;
+    res.render('account/register', {
+      title: 'CrystalIT | Register',
+      errorMessage: message,
+    });
   })
-);
+  .post(
+    passport.authenticate('register', {
+      session: false,
+      failureMessage: true,
+      failureRedirect: '/account/register/',
+      successRedirect: '/',
+    })
+  );
 
-/* GET Login page. */
-router.get('/login', function (req, res, next) {
-  if (req.isAuthenticated())
-    return res.redirect('/dashboard/');
-
-  let message = res.locals.message;
-  res.render('account/login', {
-    title: 'CrystalIT | Login',
-    errorMessage: message,
-  });
-});
-
-/*
-router.get('/login', passport.authenticate('google', { scope: ['profile'] }));
-
-router.get('/login/success',
-  passport.authenticate('google', {
-    failureRedirect: '/account/login/',
-    successRedirect: '/dashboard/',
+/* ROUTE Login page. */
+router
+  .route('/login')
+  .get((req, res) => {
+    let message = res.locals.message;
+    res.render('account/login', {
+      title: 'CrystalIT | Login',
+      errorMessage: message,
+    });
   })
-);
-*/
-
-/* POST Login page. */
-router.post(
-  '/login',
-  passport.authenticate('login', {
-    failureMessage: true,
-    failureRedirect: '/account/login/',
-    successRedirect: '/dashboard/',
-  })
-);
+  .post(
+    passport.authenticate('login', {
+      session: false,
+      failureMessage: true,
+      failureRedirect: '/account/login/',
+      successRedirect: '/dashboard/',
+    })
+  );
 
 /* GET Changepassword page */
 router.get('/changepassword', function (req, res, next) {

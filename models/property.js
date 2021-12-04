@@ -52,4 +52,4 @@ class Property {
   }
 }
 
-module.exports = () => Property;
+module.exports = Property;

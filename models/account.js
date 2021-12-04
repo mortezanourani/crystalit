@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const hash = require('md5');
-const Information = require('./information')
-const Address = require('./address');
+
+const ACCOUNTS = require('../middlewares/mongoContext').Account;
 
 const Role = {
   Administrator: { name: 'Administrator', title: 'مدیر' },
@@ -10,42 +10,29 @@ const Role = {
 };
 
 class Account {
-  username = new String();
-  passwordHash = new String();
-  role = new Object();
-  personalInfo = new Information();
-  addresses = new Array(new Address());
-  verified = new Boolean(false);
-
-  constructor() {
-    this.username = '';
-    this.passwordHash = '';
-    this.role = Role.User;
-    this.addresses = new Array(0);
+  constructor({ _id, username, password, role, verified }) {
+    this.username = username;
+    this.passwordHash = hash(password);
+    this.role = Role.User.name;
     this.verified = false;
   }
 
-  async alreadyExists(username) {
-    let account = await Context.Account.findOne({
-      username: username,
+  async doesExist() {
+    let account = await ACCOUNTS.findOne({
+      username: this.username,
     });
     return !!account;
   }
 
-  isPasswordValid(password) {
+  static isPasswordValid(password) {
     return password.length >= 8;
   }
 
-  async create(username, password) {
-    this.username = username;
-    this.passwordHash = hash(password);
-
-    let accountId = uuid.v1()
+  async save() {
+    this._id = uuid.v1()
       .split('-')
       .join('');
-    this._id = accountId;
-
-    let result = await Context.Account.insertOne(this);
+    let result = await ACCOUNTS.insertOne(this);
     return result.acknowledged;
   }
 
@@ -53,8 +40,7 @@ class Account {
     let account = await Context.Account.findOne({
       username: username,
     });
-    if (!account)
-      return false;
+    if (!account) return false;
 
     Object.assign(this, account);
     return true;
@@ -71,8 +57,7 @@ class Account {
       { $set: { passwordHash: hash(newPassword) } }
     );
 
-    if (!result)
-      return false;
+    if (!result) return false;
     return true;
   }
 
@@ -82,15 +67,12 @@ class Account {
       { $set: { personalInfo: this.personalInfo } }
     );
 
-    if (!result)
-      return false;
+    if (!result) return false;
     return true;
   }
 
   async addAddress(newAddress) {
-    let addressId = uuid.v1()
-      .split('-')
-      .join('');
+    let addressId = uuid.v1().split('-').join('');
     newAddress.id = addressId;
     this.addresses.push(newAddress);
 
@@ -99,8 +81,7 @@ class Account {
       { $set: { addresses: this.addresses } }
     );
 
-    if (!result)
-      return false;
+    if (!result) return false;
     return true;
   }
 
@@ -110,11 +91,10 @@ class Account {
       { $set: { addresses: this.addresses } }
     );
 
-    if (!result)
-      return false;
+    if (!result) return false;
     return true;
   }
 }
 
-module.exports = () => Account;
+module.exports = Account;
 
