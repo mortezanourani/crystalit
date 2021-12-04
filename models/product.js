@@ -1,6 +1,5 @@
+const PRODUCTS = require('../middlewares/mongoContext').Product;
 const uuid = require('uuid');
-const Category = require('./category');
-const Property = require('./property');
 
 class Product {
   title = new String();
@@ -11,46 +10,44 @@ class Product {
   price = new Number();
   discount = new Number();
 
-  constructor() {
-    this.title = '';
-    this.categories = new Array(0);
-    this.properties = new Array(0);
-    this.images = new Array('');
-    this.count = 0;
-    this.price = 0;
-    this.discount = 0;
+  constructor({title, categories, properties, images, count, price, discount}) {
+    this.title = title;
+    this.categories = categories;
+    this.properties = properties;
+    this.images = images;
+    this.count = count;
+    this.price = price;
+    this.discount = discount;
   }
 
-  static async findAll() {
-    let products = await Context.Product.find({}).toArray();
+  static async find() {
+    let products = await PRODUCTS.find({}).toArray();
     return products;
   }
 
-  async findSome(category) {
-    let currentCategory = new Category();
-    currentCategory = await Context.Category.findOne({
-      name: category
-    });
-    delete currentCategory._id;
+  static async findByCategory(categoryName) {
+    let { Category } = this._context.models;
+    let currentCategory = await Category.findByName(categoryName);
     
-    let products = await Context.Product.find({
-      categories: { $in: [currentCategory] }
+    let products = await PRODUCTS.find({
+      categories: {
+        $in: [{
+          name: currentCategory.name,
+          title: currentCategory.title
+        }]
+      }
     }).toArray();
     return products;
   }
 
-  async find() {
-    let product = await Context.Product.findOne({
-      _id: this._id,
+  static async findById(productId) {
+    let product = await PRODUCTS.findOne({
+      _id: productId
     });
-    if (!product)
-      return false;
-
-    Object.assign(this, product);
-    return true;
+    return product;
   }
 
-  async create() {
+  async save() {
     let productId = uuid.v1()
       .split('-')
       .join('');
@@ -91,7 +88,7 @@ class Product {
     return true;
   }
 
-  async remove() {
+  async delete() {
     let result = await Context.Product.remove({ _id: this._id });
     return result.acknowledged;
   }

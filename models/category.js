@@ -1,21 +1,28 @@
+const CATEGORIES = require('../middlewares/mongoContext').Category;
 const uuid = require('uuid');
 
 class Category {
   name = new String();
   title = new String();
 
-  constructor() {
-    this.name = '';
-    this.title = '';
+  constructor({ name, title }) {
+    this.name = name;
+    this.title = title;
+  }
+
+  static async findByName(categoryName) {
+    let category = await CATEGORIES.findOne({
+      name: categoryName,
+    });
+    return category;
   }
 
   async find() {
     let category = await Context.Category.findOne({
       _id: this._id,
     });
-    if (!category)
-      return false;
-    
+    if (!category) return false;
+
     Object.assign(this, category);
     return true;
   }
@@ -26,13 +33,10 @@ class Category {
   }
 
   async create() {
-    let categoryId = uuid.v1()
-      .split('-')
-      .join('');
+    let categoryId = uuid.v1().split('-').join('');
     this._id = categoryId;
     let result = await Context.Category.insertOne(this);
-    if (!result)
-      return false;
+    if (!result) return false;
     return true;
   }
 
@@ -42,8 +46,7 @@ class Category {
       { $set: { name: this.name, title: this.title } }
     );
 
-    if (!result)
-      return false;
+    if (!result) return false;
     return true;
   }
 

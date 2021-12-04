@@ -7,8 +7,6 @@ const orderModel = require('../models/order');
 const productModel = require('../models/product');
 const propertyModel = require('../models/property');
 
-const dataContext = require('./dataContext');
-
 module.exports = (req, res, next) => {
   const Account = accountModel();
   Account.prototype._context = req.context;
@@ -42,7 +40,6 @@ module.exports = (req, res, next) => {
   Property.prototype._context = req.context;
   Property._context = req.context;
 
-  req.context.Data = dataContext;
   req.context.models = {
     Account,
     Address,
