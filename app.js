@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const authentication = require('./middlewares/authContext');
 const injection = require('./middlewares/injectContext');
 
 const session = require('express-session');
@@ -26,16 +27,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// initialize the context
-app.use(function (req, res, next) {
-  if (!req.context)
-    req.context = {};
-  
-  next();
-});
-
-app.use(injection);
-
 app.use(
   session({
     secret: 'crystal it',
@@ -44,11 +35,15 @@ app.use(
   })
 );
 
-require('./middlewares/passport');
+require('./middlewares/passportConfig');
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(function (req, res, next) {
+app.use(authentication);
+app.use(injection);
+
+// passport error handler
+app.use((req, res, next) => {
   let messages = req.session.messages || [];
   res.locals.message = messages;
   res.locals.hasMessage = !!messages.length;
@@ -67,7 +62,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

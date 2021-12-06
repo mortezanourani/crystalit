@@ -2,6 +2,7 @@ const uuid = require('uuid');
 const hash = require('md5');
 
 const ACCOUNTS = require('../middlewares/mongoContext').Account;
+const { Timestamp } = require('bson');
 
 const Role = {
   Administrator: { name: 'Administrator', title: 'مدیر' },
@@ -13,8 +14,8 @@ class Account {
   constructor({ _id, username, password, role, verified }) {
     this.username = username;
     this.passwordHash = hash(password);
-    this.role = Role.User.name;
-    this.verified = false;
+    this.role = role;
+    this.verified = verified;
   }
 
   async doesExist() {
@@ -32,18 +33,32 @@ class Account {
     this._id = uuid.v1()
       .split('-')
       .join('');
+    this.role = Role.User.name;
+    this.verified = false;
     let result = await ACCOUNTS.insertOne(this);
     return result.acknowledged;
   }
 
-  async findByUsername(username) {
-    let account = await Context.Account.findOne({
+  static async findById(accountId) {
+    let account = await ACCOUNTS.findOne({
+      _id: accountId,
+    });
+    return account;
+  }
+
+  static async findByUsername(username) {
+    let account = await ACCOUNTS.findOne({
       username: username,
     });
-    if (!account) return false;
+    return account;
+  }
 
-    Object.assign(this, account);
-    return true;
+  static async find({ username, password }) {
+    let account = await ACCOUNTS.findOne({
+      username: username,
+      passwordHash: hash(password),
+    });
+    return account;
   }
 
   isPasswordCorrect(password) {

@@ -35,7 +35,7 @@ router
       session: false,
       failureMessage: true,
       failureRedirect: '/account/register/',
-      successRedirect: '/',
+      successRedirect: '/account/login/',
     })
   );
 
@@ -51,7 +51,7 @@ router
   })
   .post(
     passport.authenticate('login', {
-      session: false,
+      session: true,
       failureMessage: true,
       failureRedirect: '/account/login/',
       successRedirect: '/dashboard/',
