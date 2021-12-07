@@ -35,7 +35,7 @@ passport.use(
 passport.use(
   'login',
   new LocalStrategy(async (username, password, done) => {
-    const account = await Account.find({ username, password });
+    const account = await Account.findOne({ username, password });
     if (!account)
       return done(null, false, {
         message: 'Username/Password is wrong.',

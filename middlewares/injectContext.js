@@ -9,7 +9,7 @@ const propertyModel = require('../models/property');
 
 module.exports = (req, res, next) => {
   const Account = accountModel;
-  // Account.prototype._context = req.context;
+  Account.prototype._context = req.context;
   Account._context = req.context;
 
   const Address = addressModel;

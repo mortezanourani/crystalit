@@ -12,8 +12,9 @@ const Role = {
 
 class Account {
   constructor({ _id, username, password, role, verified }) {
+    this._id = _id;
     this.username = username;
-    this.passwordHash = hash(password);
+    this.passwordHash = password ? hash(password) : undefined;
     this.role = role;
     this.verified = verified;
   }
@@ -25,57 +26,61 @@ class Account {
     return !!account;
   }
 
-  static isPasswordValid(password) {
-    return password.length >= 8;
-  }
-
-  async save() {
-    this._id = uuid.v1()
-      .split('-')
-      .join('');
-    this.role = Role.User.name;
-    this.verified = false;
-    let result = await ACCOUNTS.insertOne(this);
-    return result.acknowledged;
-  }
-
   static async findById(accountId) {
     let account = await ACCOUNTS.findOne({
       _id: accountId,
     });
-    return account;
+    if (!account)
+      return null;
+    return new Account(account);
   }
 
   static async findByUsername(username) {
     let account = await ACCOUNTS.findOne({
       username: username,
     });
-    return account;
+    if (!account)
+      return null;
+    return new Account(account);
   }
 
-  static async find({ username, password }) {
+  static async findOne({ username, password }) {
     let account = await ACCOUNTS.findOne({
       username: username,
       passwordHash: hash(password),
     });
-    return account;
+    if (!account)
+      return null;
+    return new Account(account);
   }
 
-  isPasswordCorrect(password) {
-    let hashedPassword = hash(password);
-    return this.passwordHash === hashedPassword;
+  static isPasswordValid(password) {
+    return password.length >= 8;
+  }
+
+  async save() {
+    let account = {
+      _id: uuid.v1()
+        .split('-')
+        .join(''),
+      username: this.username,
+      passwordHash: this.passwordHash,
+      role: Role.User.name,
+      verified: false,
+    };
+    let result = await ACCOUNTS.insertOne(account);
+    return result.acknowledged;
   }
 
   async changePassword(newPassword) {
-    let result = await Context.Account.updateOne(
+    let result = await ACCOUNTS.updateOne(
       { _id: this._id },
       { $set: { passwordHash: hash(newPassword) } }
     );
-
-    if (!result) return false;
-    return true;
+    return result.acknowledged;
   }
 
+  /*
   async updateInformation() {
     let result = await Context.Account.updateOne(
       { _id: this._id },
@@ -109,6 +114,7 @@ class Account {
     if (!result) return false;
     return true;
   }
+  */
 }
 
 module.exports = Account;
