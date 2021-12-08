@@ -2,7 +2,6 @@ const uuid = require('uuid');
 const hash = require('md5');
 
 const ACCOUNTS = require('../middlewares/mongoContext').Account;
-const { Timestamp } = require('bson');
 
 const Role = {
   Administrator: { name: 'Administrator', title: 'مدیر' },

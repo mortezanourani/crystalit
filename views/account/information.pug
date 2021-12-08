@@ -1,4 +1,4 @@
-extends layout 
+extends ../layout/dashboard 
 
 block content 
   h1= 'Personal Information'
@@ -7,16 +7,16 @@ block content
   
   form(action="", method="post") 
     p
-      input(type="text", name="firstname" placeholder="نام" value=firstName)
+      input(type="text", name="firstName" placeholder="نام" value=information.firstName)
     p
-      input(type="text", name="lastname" placeholder="نام خانوادگی" value=lastName)
+      input(type="text", name="lastName" placeholder="نام خانوادگی" value=information.lastName)
     p
-      input(type="date", name="birthdate" value=birthDate)
-    for phoneNumber in phoneNumbers
+      input(type="date", name="birthDate" value=information.birthDate)
+    for phoneNumber in information.phoneNumbers
       p
-        input(type="text", name="phonenumber" placeholder="شماره تماس" value=phoneNumber)
+        input(type="text", name="phoneNumbers" placeholder="شماره تماس" value=phoneNumber)
     p
-      input(type="text", name="newPhonenumber" placeholder="شماره تماس")
+      input(type="text", name="phoneNumbers" placeholder="شماره تماس")
         
     p
-      input(type="submit", value="ورود")
+      input(type="submit", value="ثبت")

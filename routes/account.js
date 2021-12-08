@@ -3,6 +3,7 @@ const passport = require('passport');
 var router = express.Router();
 
 const Account = require('../models/account');
+const Information = require('../models/information');
 
 router
   .route(['/', '/register', '/login'])
@@ -27,7 +28,6 @@ router
     let message = res.locals.message;
     res.render('account/register', {
       title: 'CrystalIT | Register',
-      role: req.context.user.role,
       errorMessage: message,
     });
   })
@@ -47,7 +47,6 @@ router
     let message = res.locals.message;
     res.render('account/login', {
       title: 'CrystalIT | Login',
-      role: req.context.user.role,
       errorMessage: message,
     });
   })
@@ -117,59 +116,31 @@ router
     res.redirect('/account/changepassword/');
   });
 
-/* GET Information page */
-router.get('/information', function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
+/* ROUTE Information page */
+router
+  .route('/information')
+  .get(async (req, res) => {
+    let information = await Information.findByUserId();
+    console.log(information)
+    let message = res.locals.message;
+    res.render('account/information', {
+      title: 'CrystaIT | Information',
+      information: information,
+      errorMessage: message,
+    });
+  })
+  .post(async (req, res) => {
+    let errorMessage;
+    const information = new Information(req.body);
+    let acknowledged = await information.update();
+    if (!acknowledged)
+      errorMessage = 'Something went wrong.';
+    if (errorMessage === '')
+      errorMessage = 'Personal information updated successfully.';
   
-  let account = req.user;
-  let information = account.personalInfo;
-  let message = res.locals.message;
-
-  res.render('account/information', {
-    title: 'CrystaIT | Information',
-    firstName: information.firstName,
-    lastName: information.lastName,
-    birthDate: information.birthDate,
-    phoneNumbers: information.phoneNumbers,
-    errorMessage: message,
+    req.session.messages = [errorMessage];
+    res.redirect('/account/information/');
   });
-});
-
-/* POST Information page */
-router.post('/information', async function (req, res, next) {
-  let account = new Account();
-  Object.assign(account, req.user);
-  let formCollection = req.body;
-  account.personalInfo.firstName = formCollection.firstname;
-  account.personalInfo.lastName = formCollection.lastname;
-  account.personalInfo.birthDate = formCollection.birthdate;
-  account.personalInfo.phoneNumbers = new Array(0);
-  if (formCollection.phonenumber) {
-    if (typeof formCollection.phonenumber === 'object') {
-      formCollection.phonenumber.forEach((phoneNumber) => {
-        if(phoneNumber)
-          account.personalInfo.phoneNumbers.push(phoneNumber);
-      });
-    } else {
-      if(formCollection.phonenumber)
-        account.personalInfo.phoneNumbers.push(formCollection.phonenumber);
-    }
-  }
-  if (formCollection.newPhonenumber)
-    account.personalInfo.phoneNumbers.push(formCollection.newPhonenumber);
-  
-  let errorMessage = '';
-  let acknowledged = await account.updateInformation();
-  if (!acknowledged)
-    errorMessage = 'Something went wrong.';
-
-  if (errorMessage === '')
-    errorMessage = 'Personal information updated successfully.';
-  
-  req.session.messages = [errorMessage];
-  res.redirect('/account/information/');
-});
 
 /* GET Address page */
 router.get('/address', function (req, res, next) {
