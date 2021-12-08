@@ -27,6 +27,7 @@ router
     let message = res.locals.message;
     res.render('account/register', {
       title: 'CrystalIT | Register',
+      role: req.context.user.role,
       errorMessage: message,
     });
   })
@@ -46,6 +47,7 @@ router
     let message = res.locals.message;
     res.render('account/login', {
       title: 'CrystalIT | Login',
+      role: req.context.user.role,
       errorMessage: message,
     });
   })
@@ -84,6 +86,7 @@ router
     let message = res.locals.message;
     res.render('account/changepassword', {
       title: 'CrystaIT | Change Password',
+      role: req.context.user.role,
       errorMessage: message,
     });
   })

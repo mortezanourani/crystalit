@@ -16,7 +16,8 @@ router.use(function (req, res, next) {
 /* GET Dashboard page. */
 router.get('/', function (req, res, next) {
   res.render('dashboard/index', {
-    title: 'CrystalIT | Dashboard'
+    title: 'CrystalIT | Dashboard',
+    role: req.context.user.role,
   });
 });
 

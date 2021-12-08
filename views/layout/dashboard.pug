@@ -1,0 +1,31 @@
+html(lang="en" dir="rtl")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    title= title
+  body 
+    div(class="panel" style="display: inline-block; width: 20%; vertical-align: top; padding-left: 45px;")
+      p 
+        a(href="/dashboard/") بازگشت به داشبورد
+      br
+
+      p
+        a(href="/dashboard/order/") سابقه سفارشات
+      p
+        a(href="/account/changepassword/") تغییر رمزعبور
+      p
+        a(href="/account/logout/") خروج
+      br
+
+      - if(role == ('Manager' || 'Admin'))
+        p
+          a(href="/dashboard/category/") دسته بندی ها
+        p
+          a(href="/dashboard/property/") لیست ویژگی ها
+        p
+          a(href="/dashboard/product/") محصولات فروشگاه
+
+    div(class="content" style="display: inline-block;")
+      block content 

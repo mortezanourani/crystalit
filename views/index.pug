@@ -1,14 +1,7 @@
-extends layout
+extends ./layout/main
 
 block content
   h1= title
-
-  div
-    p
-      a(href="/account/login/") ورود به حساب کاربری
-
-    p
-      a(href="/account/register/") ثبت نام
 
   for product of products
     span 
