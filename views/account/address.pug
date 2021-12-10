@@ -1,4 +1,4 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
   h1= 'Addresses'
@@ -8,9 +8,13 @@ block content
   if(addresses.length >= 1)
     for address of addresses
       p
-        a(href="/account/address/" + address.id) #{address.province}, #{address.city}, #{address.street}, #{address.address}, کدپستی #{address.postalCode}
+        p #{address.province}, #{address.city}, #{address.street}, #{address.address}, کدپستی #{address.postalCode}
+          span 
+            a(href="/account/address/" + address._id) ویرایش
+          span 
+            a(href="/account/address/remove/" + address._id) حذف
   else
     p هنوز آدرسی ثبت نکرده اید.
 
   p آیا مایلید آدرس جدیدی ثبت نمایید؟
-  a(href="/account/address/add/") اضافه کردن آدرس
+  a(href="/account/address/add/") ثبت آدرس جدید

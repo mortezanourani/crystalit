@@ -1,10 +1,7 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
   h1= 'Addresses'
-  if(errorMessage)
-    p #{errorMessage}
-
   form(action="", method="post") 
     p 
       input(type="text", name="province", placeholder="استان")

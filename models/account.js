@@ -78,42 +78,6 @@ class Account {
     );
     return result.acknowledged;
   }
-
-  /*
-  async updateInformation() {
-    let result = await Context.Account.updateOne(
-      { _id: this._id },
-      { $set: { personalInfo: this.personalInfo } }
-    );
-
-    if (!result) return false;
-    return true;
-  }
-
-  async addAddress(newAddress) {
-    let addressId = uuid.v1().split('-').join('');
-    newAddress.id = addressId;
-    this.addresses.push(newAddress);
-
-    let result = await Context.Account.updateOne(
-      { _id: this._id },
-      { $set: { addresses: this.addresses } }
-    );
-
-    if (!result) return false;
-    return true;
-  }
-
-  async updateAddress() {
-    let result = await Context.Account.updateOne(
-      { _id: this._id },
-      { $set: { addresses: this.addresses } }
-    );
-
-    if (!result) return false;
-    return true;
-  }
-  */
 }
 
 module.exports = Account;

@@ -1,10 +1,7 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
   h1= 'Addresses'
-  if(errorMessage)
-    p #{errorMessage}
-
   form(action="", method="post") 
     p 
       input(type="text", name="province", placeholder="استان", value=address.province)
@@ -18,8 +15,5 @@ block content
       input(type="text", name="postalCode", placeholder="کد پستی", value=address.postalCode)
 
     p 
-      a(href="/account/address/remove/"+address.id)
-        input(type="button", value="حذف")
-      
       input(type="submit", value="به روز رسانی")
       
