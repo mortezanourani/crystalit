@@ -1,15 +1,15 @@
-extends layout 
+extends ../layout/main
 
 block content 
   h1= title 
 
   table 
-    for item in cart 
+    for item of cart 
       tr
         td= item.title
         td(style="color: red")= item.price*((100-item.discount)/100) + " تومان"
         td
-          a(href="/cart/remove/" + item.productId) حذف
+          a(href="/cart/delete/" + item.productId) حذف
     
   p 
     a(href="/cart/checkout/") ادامه فرآیند ثبت سفارش

@@ -4,38 +4,56 @@ var router = express.Router();
 const Product = require('../models/product');
 const Item = require('../models/item');
 
-/* GET add a product to cart */
-router.get('/add/:id', async function (req, res, next) {
-  let product = new Product();
-  product._id = req.params.id;
-  await product.find();
 
-  let item = new Item(product);
-
-  let cart = req.session.cart || {};
-  cart[product._id] = item;
-  req.session.cart = cart;
-
-  return res.redirect('/product/' + product._id);
-});
-
-/* GET cart page */
-router.get('/', function (req, res, next) {
-  let cart = req.session.cart || {};
-  
-  res.render('cart/index', {
-    title: "CrystalIT | Cart",
-    cart: cart,
+/* ROUTE cart page */
+router.route('/')
+  .get(async (req, res) => {
+    let cart = req.session.cart || [];
+    let cartItems = [];
+    for (item of cart) {
+      let product = await Product.findById(item.productId);
+      cartItems.push({
+        productId: product._id,
+        title: product.title,
+        price: product.price,
+        discount: product.discount,
+      });
+    }
+    res.render('cart/index', {
+      title: 'CrystalIT | Cart',
+      cart: cartItems,
+    });
   })
-});
-
-/* GET remove product from cart */
-router.get('/remove/:id', function (req, res, next) {
-  let cart = req.session.cart || {};
+  .post(async (req, res) => {
+    let productId = req.body.productId;
+    let product = await Product.findById(productId);
+    let item = {
+      productId: product._id,
+      count: 1,
+    };
+    let cart = req.session.cart || [];
+    let isDuplicated = false;
+    for (let cartItem of cart) {
+      if (cartItem.productId === item.productId) {
+        isDuplicated = true;
+        break;
+      }
+    }
+    if (!isDuplicated)
+      cart.push(item);
+    req.session.cart = cart;
+    return res.redirect('/product/' + product._id);
+  });
+router.get('/delete/:id', (req, res) => {
+  let cart = req.session.cart || [];
   let productId = req.params.id;
-  delete cart[productId];
-  req.session.cart = cart;
-  
+  let cartItem = [];
+  for (let item of cart) {
+    if (item.productId !== productId)
+      cartItem.push(item);
+  }
+  console.log(cartItem);
+  req.session.cart = cartItem;
   return res.redirect('/cart/');
 });
 

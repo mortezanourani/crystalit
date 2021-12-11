@@ -11,6 +11,7 @@ block content
           p= product.price 
           p= '-' + product.discount + '%'
           p= product.price*((1-(product.discount/100)))
-        for productCategory of product.categories 
-          p
-            a(href="/category/" + productCategory.name)= productCategory.title
+        p
+          for productCategory of product.categories 
+            span
+              a(href="/category/" + productCategory.name)= productCategory.title
