@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const Product = require('../models/product');
+const Account = require('../models/account');
 const Item = require('../models/item');
 
 
@@ -58,17 +59,30 @@ router.get('/delete/:id', (req, res) => {
 });
 
 /* GET cart checkout page */
-router.get('/checkout/', function (req, res, next) {
-  if (!req.isAuthenticated())
-    return res.redirect('/account/login/');
-  
-  let user = req.user;
-  let cart = req.session.cart || {};
-  res.render('cart/checkout', {
-    title: "CrystalIT | Cart Checkout",
-    user: user,
-    cart: cart,
+router.route('/checkout')
+  .all((req, res, next) => {
+    if (!req.isAuthenticated())
+      return res.redirect('/account/login/');
+    next();
+  })
+  .get(async (req, res) => {
+    let user = await Account.findById();
+    let cart = req.session.cart || [];
+    let cartItems = [];
+    for (item of cart) {
+      let product = await Product.findById(item.productId);
+      cartItems.push({
+        productId: product._id,
+        title: product.title,
+        price: product.price,
+        discount: product.discount,
+      });
+    }
+    res.render('cart/checkout', {
+      title: "CrystalIT | Cart Checkout",
+      user: user,
+      cart: cartItems,
+    });
   });
-});
 
 module.exports = router;

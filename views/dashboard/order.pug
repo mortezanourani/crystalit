@@ -1,10 +1,19 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
-  h1 سابقه سفارشات
+  h1 سفارشات
   
   if(message)
     p #{message}
 
-  for order of orders
-    a(href="/dashboard/order/" + order._id)= order._id
+  if(orders)
+    for order of orders
+      a(href="/dashboard/order/" + order._id)= order._id
+  else 
+    -let address = order.address
+    p= address.province + " - " + address.city + " - " + address.address 
+    p= order.phoneNumber
+    for item of order.items
+      p= item.title 
+    -let status = order.status[order.status.length-1].title;
+    p= status

@@ -10,12 +10,16 @@ const Role = {
 };
 
 class Account {
-  constructor({ _id, username, password, role, verified }) {
+  constructor({ _id, username, password, role, verified, addresses, personalInfo }) {
     this._id = _id;
     this.username = username;
     this.passwordHash = password ? hash(password) : undefined;
     this.role = role;
     this.verified = verified;
+    if (addresses)
+      this.addresses = addresses;
+    if (personalInfo)
+      this.personalInfo = personalInfo;
   }
 
   async doesExist() {
@@ -26,6 +30,8 @@ class Account {
   }
 
   static async findById(accountId) {
+    if (!accountId)
+      accountId = this._context.userId;
     let account = await ACCOUNTS.findOne({
       _id: accountId,
     });

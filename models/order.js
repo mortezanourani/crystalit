@@ -1,35 +1,47 @@
 const Address = require('./address');
 const Item = require('./item');
 
+const ORDERS = require('../middlewares/mongoContext').Order;
+
 const Status = {
-  Submitted: { step: 1, title: 'در انتظار پرداخت' },
-  Paid: { step: 2, title: 'پرداخت شده' },
-  Preparing: { step: 3, title: 'در حال آماده سازی سفارش' },
-  Sent: { step: 4, title: 'ارسال شده' },
-  Done: { step: 5, title: 'تحویل شده' },
+  Submitted: { step: 1, title: 'در انتظار پرداخت', date: new Date() },
+  Paid: { step: 2, title: 'پرداخت شده', date: new Date() },
+  Preparing: { step: 3, title: 'در حال آماده سازی سفارش', date: new Date() },
+  Sent: { step: 4, title: 'ارسال شده', date: new Date() },
+  Done: { step: 5, title: 'تحویل شده', date: new Date() },
 };
 
 const uuid = require('uuid');
 
 class Order {
-  accountId = new String();
-  address = new Address();
-  phoneNumber = new Number();
-  items = new Array(0);
-  discount = new Number();
-  status = new Array(0);
-
-  async findAll(userId) {
-    let result;
+  constructor({ _id, accountId, address, phoneNumber, items, discount, status }) {
+    this._id = _id;
+    this.accountId = accountId || this._context.userId;
+    this.address = address;
+    this.phoneNumber = phoneNumber;
+    this.items = items;
+    this.discount = discount;
+    let emptyStatus = [];
+    emptyStatus.push(Status.Submitted);
+    this.status = status || emptyStatus;
+  }
+  
+  static async findAll(userId) {
     if (!userId)
-      result = await Context.Order.find({}).toArray();
-    else
-      result = await Context.Order.find({
-        accountId: userId,
-      }).toArray();
-    
-    console.log(result);
+      userId = this._context.userId;
+    let result = await ORDERS.find({
+      accountId: userId,
+    }).toArray();
     return result;
+  }
+
+  static async findById(orderId) {
+    let result = await ORDERS.findOne({
+      _id: orderId,
+    });
+    if (!result)
+      return null;
+    return new Order(result);
   }
 
   async save() {
@@ -38,8 +50,16 @@ class Order {
       .join('');
     this._id = orderId;
 
-    let result = await Context.Order.insertOne(this);
-    return result.acknowledged;
+    let result = await ORDERS.insertOne({
+      _id: this._id,
+      accountId: this.accountId,
+      address: this.address,
+      phoneNumber: this.phoneNumber,
+      items: this.items,
+      discount: this.discount,
+      status: this.status,
+    });
+    return result;
   }
 }
 

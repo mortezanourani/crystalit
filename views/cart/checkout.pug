@@ -1,4 +1,4 @@
-extends layout 
+extends ../layout/main
 
 block content 
   h1= title 
@@ -9,23 +9,25 @@ block content
         td= item.title
         td(style="color: red")= item.price*((100-item.discount)/100) + " تومان"
 
-  form(action="/dashboard/order/add/", method="post") 
+  form(action="/dashboard/order/", method="post") 
     br
     for address of user.addresses
-      input(type="radio", name="address", id=address.id, value=address)
-      label(for=address.id)= address.address
+      p 
+        input(type="radio", name="address", id=address.id, value=address)
+        label(for=address.id)= address.province + "-" + address.city + "-" + address.address + "-" + address.postalCode
 
     br
     br
     for phone of user.personalInfo.phoneNumbers
-      input(type="radio", name="phone", id=phone, value=phone)
-      label(for=phone)= phone
+      p 
+        input(type="radio", name="phone", id=phone, value=phone)
+        label(for=phone)= phone
 
     p 
       input(type="text", name="discount", placeholder="کد تخفیف")
 
     p 
-      input(type="submit", value="ثبت سفارش")
+      input(type="submit", value="ادامه فرآیند خرید")
 
   p
     a(href="/cart/") تصحیح سبد خرید

@@ -21,6 +21,61 @@ router.get('/', function (req, res, next) {
   });
 });
 
+/* ROUTE order page */
+router
+  .route('/order')
+  .get(async function (req, res) {
+    let orders = await Order.findAll();
+
+    res.render('dashboard/order', {
+      title: 'CrystalIT | Orders',
+      orders: orders,
+    });
+  })
+  .post(async (req, res) => {
+    let cart = req.session.cart;
+    let cartItems = [];
+    for (item of cart) {
+      let product = await Product.findById(item.productId);
+      cartItems.push({
+        productId: product._id,
+        title: product.title,
+        price: product.price,
+        discount: product.discount,
+      });
+    }
+
+    let formCollection = req.body;
+    let address = JSON.parse(formCollection.address);
+    delete address._id;
+    let phone = formCollection.phone;
+    let discountCode = formCollection.discount;
+
+    const order = new Order({
+      address: address,
+      phoneNumber: phone,
+      items: cartItems,
+      discount: discountCode,
+    });
+
+    let acknowledged = await order.save();
+    let message = 'Order submitted successfully.';
+    if (!acknowledged) message = 'Something went wrong.';
+
+    delete req.session.cart;
+    req.session.messages = [message];
+    res.redirect('/dashboard/order/' + order._id);
+  });
+
+router.get('/order/:id', async (req, res) => {
+  let orderId = req.params.id;
+  let order = await Order.findById(orderId);
+  res.render('dashboard/order', {
+    title: 'CrystalIT | Order',
+    order: order,
+  });
+});
+
 /* GET Category page. */
 router.get('/category', async function (req, res, next) {
   let message = res.locals.message;
@@ -319,44 +374,6 @@ router.get('/product/remove/:id', async function (req, res, next) {
   
   req.session.messages = [message];
   res.redirect('/dashboard/product/');
-});
-
-/* POST create order */
-router.post('/order/add/', async function (req, res, next) {
-  let order = new Order();
-
-  let user = req.user;
-  let formCollection = req.body;
-  let cart = req.session.cart;
-
-  order.accountId = user._id;
-  order.address = JSON.parse(formCollection.address);
-  order.discount = formCollection.discount;
-  for (item in cart)
-    order.items.push(cart[item]);
-  order.phoneNumber = formCollection.phone;
-  Status.Submitted.time = new Date();
-  order.status = [Status.Submitted];
-
-  let acknowledged = await order.save();
-  message = 'Order submitted successfully.';
-  if (!acknowledged)
-    message = 'Something went wrong.';
-  
-  delete req.session.cart;
-  req.session.messages = [message];
-  res.redirect('/dashboard/order/');
-});
-
-/* GET order page */
-router.get('/order', async function (req, res, next) {
-  let order = new Order();
-  let orders = await order.findAll(req.user._id);
-
-  res.render('dashboard/order', {
-    title: "CrystalIT | Orders",
-    orders: orders,
-  });
 });
 
 module.exports = router;
