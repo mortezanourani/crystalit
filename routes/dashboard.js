@@ -91,7 +91,7 @@ router.get('/category', async (req, res) => {
   });
 });
 
-/* GET Category create page. */
+/* ROUTE Category create page. */
 router
   .route('/category/add')
   .get(function (req, res, next) {
@@ -135,8 +135,7 @@ router
     req.session.messages = [message];
     res.redirect('/dashboard/category/');
   });
-
-/* Category remove process */
+// Category .delete route method
 router.get('/category/remove/:id', async (req, res) => {
   let categoryId = req.params.id;
   let category = await Category.findById(categoryId);
@@ -148,75 +147,71 @@ router.get('/category/remove/:id', async (req, res) => {
   res.redirect('/dashboard/category/');
 });
 
-/* GET Property page. */
-router.get('/property', async function (req, res, next) {
-  let message = res.locals.message;
-  let property = new Property();
-  let properties = new Array(0);
-  properties = await property.findAll();
-  res.render('dashboard/property', {
-    title: 'CrytsalIT | Properties',
-    properties: properties,
-    message: message,
+/* ROUTE Property page. */
+router.route('/property')
+  .get(async (req, res) => {
+    let message = res.locals.message;
+    let properties = await Property.findAll();
+    res.render('dashboard/property', {
+      title: 'CrytsalIT | Properties',
+      role: req.context.user.role,
+      properties: properties,
+      message: message,
+    });
   });
-});
 
-/* GET Property create page. */
-router.get('/property/add', function (req, res, next) {
-  res.render('dashboard/propertyAdd', {
-    title: 'CrytsalIT | Create Property',
+/* ROUTE Property create page. */
+router
+  .route('/property/add')
+  .get((req, res) => {
+    res.render('dashboard/property.add.pug', {
+      title: 'CrytsalIT | Create Property',
+      role: req.context.user.role,
+    });
+  })
+  .post(async (req, res) => {
+    let formCollection = req.body;
+    let property = new Property(formCollection);
+    let acknowledged = await property.save();
+    let message = 'Property created successfully.'
+    if (!acknowledged)
+      message = 'Something went wrong.';
+    req.session.messages = [message];
+    res.redirect('/dashboard/property/');
   });
-});
 
-/* POST Property create page. */
-router.post('/property/add', async function (req, res, next) {
-  let property = new Property();
-  let formCollection = req.body;
-  Object.assign(property, formCollection);
-  let acknowledged = await property.create();
-  let message = 'Property created successfully.'
+/* ROUTE Property edit page. */
+router
+  .route('/property/:id')
+  .get(async (req, res) => {
+    let propertyId = req.params.id;
+    let property = await Property.findById(propertyId);
+    res.render('dashboard/property.edit.pug', {
+      title: 'CrytsalIT | Edit Property',
+      role: req.context.user.role,
+      property: property,
+    });
+  })
+  .post(async (req, res) => {
+    let propertyId = req.params.id;
+    let formCollection = req.body;
+    let property = new Property(formCollection);
+    property._id = propertyId;
+    let acknowledged = await property.update();
+    let message = 'Property updated successfully.'
+    if (!acknowledged)
+      message = 'Something went wrong.';
+    req.session.messages = [message];
+    res.redirect('/dashboard/property/');
+  });
+// Property .delete process
+router.get('/property/remove/:id', async (req, res) => {
+  let propertyId = req.params.id;
+  let property = await Property.findById(propertyId);
+  let acknowledged = await property.delete();
+  let message = 'Property removed successfully.';
   if (!acknowledged)
     message = 'Something went wrong.';
-  
-  req.session.messages = [message];
-  res.redirect('/dashboard/property/');
-});
-
-/* GET Property update page. */
-router.get('/property/:id', async function (req, res, next) {
-  let property = new Property();
-  property._id = req.params.id;
-  await property.find();
-  res.render('dashboard/propertyUpdate', {
-    title: 'CrytsalIT | Edit Property',
-    property: property,
-  });
-});
-
-/* POST Property update page. */
-router.post('/property/:id', async function (req, res, next) {
-  let property = new Property();
-  property._id = req.params.id;
-  let formCollection = req.body;
-  Object.assign(property, formCollection);
-  let acknowledged = await property.update();
-  let message = 'Property updated successfully.'
-  if (!acknowledged)
-    message = 'Something went wrong.';
-  
-  req.session.messages = [message];
-  res.redirect('/dashboard/property/');
-});
-
-/* Property remove process */
-router.get('/property/remove/:id', async function (req, res, next) {
-  let property = new Property();
-  property._id = req.params.id;
-  let acknowledged = await property.remove();
-  message = 'Property removed successfully.';
-  if (!acknowledged)
-    message = 'Something went wrong.';
-  
   req.session.messages = [message];
   res.redirect('/dashboard/property/');
 });

@@ -1,4 +1,4 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
   h1 ویژگی ها
@@ -8,8 +8,11 @@ block content
 
   if(properties.length >= 1)
     for property of properties
-      p
-        a(href="/dashboard/property/" + property._id) #{property.name}
+      p #{property.title}
+        span 
+          a(href="/dashboard/property/" + property._id) ویرایش
+        span 
+          a(href="/dashboard/property/remove/" + property._id) حذف
   else
     p هنوز ویژگی ای اضافه نکرده اید.
 

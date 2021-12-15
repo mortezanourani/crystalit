@@ -1,4 +1,4 @@
-extends layout 
+extends ../layout/dashboard 
 
 block content 
   h1 ویرایش ویژگی
@@ -12,8 +12,5 @@ block content
       input(type="text", name="unit", placeholder="واحد اندازه گیری", value=property.unit)
 
     p 
-      a(href="/dashboard/property/remove/" + property._id)
-        input(type="button", value="حذف")
-      
       input(type="submit", value="به روز رسانی")
       
