@@ -1,15 +1,17 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
   h1 دسته بندی ها
-  
   if(message)
     p #{message}
 
   if(categories.length >= 1)
     for category of categories
-      p
-        a(href="/dashboard/category/" + category._id) #{category.name}
+      p #{category.title} 
+        span 
+          a(href="/dashboard/category/" + category._id) ویرایش
+        span 
+          a(href="/dashboard/category/remove/" + category._id) حذف
   else
     p هنوز دسته بندی نساخته اید.
 

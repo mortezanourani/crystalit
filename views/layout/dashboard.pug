@@ -23,7 +23,7 @@ html(lang="en" dir="rtl")
         a(href="/account/logout/") خروج
       br
 
-      - if(role == ('Manager' || 'Admin'))
+      - if(role.level <= 2)
         p
           a(href="/dashboard/category/") دسته بندی ها
         p

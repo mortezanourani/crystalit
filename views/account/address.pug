@@ -7,12 +7,11 @@ block content
 
   if(addresses.length >= 1)
     for address of addresses
-      p
-        p #{address.province}, #{address.city}, #{address.street}, #{address.address}, کدپستی #{address.postalCode}
-          span 
-            a(href="/account/address/" + address._id) ویرایش
-          span 
-            a(href="/account/address/remove/" + address._id) حذف
+      p #{address.province}, #{address.city}, #{address.street}, #{address.address}, کدپستی #{address.postalCode}
+        span 
+          a(href="/account/address/" + address._id) ویرایش
+        span 
+          a(href="/account/address/remove/" + address._id) حذف
   else
     p هنوز آدرسی ثبت نکرده اید.
 

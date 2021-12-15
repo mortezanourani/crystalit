@@ -2,10 +2,8 @@ const CATEGORIES = require('../middlewares/mongoContext').Category;
 const uuid = require('uuid');
 
 class Category {
-  name = new String();
-  title = new String();
-
-  constructor({ name, title }) {
+  constructor({ _id, name, title }) {
+    this._id = _id;
     this.name = name;
     this.title = title;
   }
@@ -14,44 +12,48 @@ class Category {
     let category = await CATEGORIES.findOne({
       name: categoryName,
     });
-    return category;
+    return new Category(category);
   }
 
-  async find() {
-    let category = await Context.Category.findOne({
-      _id: this._id,
+  static async findById(categoryId) {
+    let category = await CATEGORIES.findOne({
+      _id: categoryId,
     });
-    if (!category) return false;
-
-    Object.assign(this, category);
-    return true;
+    return new Category(category);
   }
 
-  async findAll() {
-    let categories = await Context.Category.find({}).toArray();
+  static async findAll() {
+    let categories = await CATEGORIES.find({}).toArray();
     return categories;
   }
 
-  async create() {
-    let categoryId = uuid.v1().split('-').join('');
-    this._id = categoryId;
-    let result = await Context.Category.insertOne(this);
-    if (!result) return false;
-    return true;
+  async save() {
+    let category = {
+      _id: uuid.v1()
+        .split('-')
+        .join(''),
+      name: this.name,
+      title: this.title,
+    }
+    let result = await CATEGORIES.insertOne(category);
+    return result.acknowledged;
   }
 
   async update() {
-    let result = await Context.Category.updateOne(
+    let result = await CATEGORIES.updateOne(
       { _id: this._id },
-      { $set: { name: this.name, title: this.title } }
+      {
+        $set: {
+          name: this.name,
+          title: this.title
+        }
+      }
     );
-
-    if (!result) return false;
-    return true;
+    return result.acknowledged;
   }
 
-  async remove() {
-    let result = await Context.Category.remove({ _id: this._id });
+  async delete() {
+    let result = await CATEGORIES.deleteOne({ _id: this._id });
     return result.acknowledged;
   }
 }

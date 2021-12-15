@@ -17,8 +17,6 @@ router
 /* GET Account page. */
 router
   .get('/', (req, res) => {
-    if (req.isAuthenticated())
-      return res.redirect('/dashboard/');
     res.redirect('/account/login/');
   });
 
@@ -131,6 +129,7 @@ router
     let message = res.locals.message;
     res.render('account/information', {
       title: 'CrystaIT | Information',
+      role: req.context.user.role,
       information: information,
       errorMessage: message,
     });
@@ -154,6 +153,7 @@ router.get('/address', async (req, res) => {
   let message = res.locals.message;
   res.render('account/address', {
     title: 'CrystaIT | Address',
+    role: req.context.user.role,
     addresses: addresses,
     errorMessage: message,
   });
@@ -165,7 +165,8 @@ router
   .get((req, res) => {
     res.render('account/address.add.pug', {
       title: 'Crystal IT | Add Address',
-    })
+      role: req.context.user.role,
+    });
   })
   .post(async (req, res) => {
     const address = new Address(req.body);
@@ -185,16 +186,17 @@ router
     let address = await Address.findById(addressId);
     res.render('account/address.edit.pug', {
       title: 'Crystal IT | Edit Address',
+      role: req.context.user.role,
       address: address,
-    })
+    });
   })
   .post(async (req, res) => {
     let address = new Address(req.body);
     address._id = req.params.id;
     let acknowledged = await address.update();
+    let errorMessage = 'Address updated successfully.';
     if (!acknowledged)
       errorMessage = 'Something went wrong.';
-    errorMessage = 'Address updated successfully.';
     req.session.messages = [errorMessage];
     res.redirect('/account/address/');
   });

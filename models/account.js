@@ -4,9 +4,9 @@ const hash = require('md5');
 const ACCOUNTS = require('../middlewares/mongoContext').Account;
 
 const Role = {
-  Administrator: { name: 'Administrator', title: 'مدیر' },
-  Manager: { name: 'Manager', title: 'متصدی' },
-  User: { name: 'User', title: 'مشتری' },
+  Administrator: { name: 'Administrator', title: 'مدیر', level: 1 },
+  Manager: { name: 'Manager', title: 'متصدی', level: 2 },
+  User: { name: 'User', title: 'مشتری', level: 3 },
 };
 
 class Account {
@@ -70,7 +70,7 @@ class Account {
         .join(''),
       username: this.username,
       passwordHash: this.passwordHash,
-      role: Role.User.name,
+      role: Role.User,
       verified: false,
     };
     let result = await ACCOUNTS.insertOne(account);

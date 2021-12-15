@@ -6,7 +6,7 @@ const Property = require('../models/property');
 const Product = require('../models/product');
 const Order = require('../models/order');
 
-router.use(function (req, res, next) {
+router.use((req, res, next) => {
   if (!req.isAuthenticated())
     return res.redirect('/account/login/');
   
@@ -24,11 +24,12 @@ router.get('/', function (req, res, next) {
 /* ROUTE order page */
 router
   .route('/order')
-  .get(async function (req, res) {
+  .get(async (req, res) => {
     let orders = await Order.findAll();
 
     res.render('dashboard/order', {
       title: 'CrystalIT | Orders',
+      role: req.context.user.role,
       orders: orders,
     });
   })
@@ -72,18 +73,19 @@ router.get('/order/:id', async (req, res) => {
   let order = await Order.findById(orderId);
   res.render('dashboard/order', {
     title: 'CrystalIT | Order',
+    role: req.context.user.role,
     order: order,
   });
 });
 
 /* GET Category page. */
-router.get('/category', async function (req, res, next) {
+router.get('/category', async (req, res) => {
   let message = res.locals.message;
-  let category = new Category();
-  let categories = new Array(0);
-  categories = await category.findAll();
+  let categories = await Category.findAll();
+
   res.render('dashboard/category', {
     title: 'CrytsalIT | Categories',
+    role: req.context.user.role,
     categories: categories,
     message: message,
   });
@@ -93,57 +95,55 @@ router.get('/category', async function (req, res, next) {
 router
   .route('/category/add')
   .get(function (req, res, next) {
-    res.render('dashboard/categoryAdd', {
+    res.render('dashboard/category.add.pug', {
       title: 'CrytsalIT | Create Category',
+      role: req.context.user.role,
     });
   })
-  .post(async function (req, res, next) {
-    let category = new Category();
+  .post(async (req, res) => {
     let formCollection = req.body;
-    Object.assign(category, formCollection);
-    let acknowledged = await category.create();
+    let category = new Category(formCollection);
+    let acknowledged = await category.save();
     let message = 'Category created successfully.';
-    if (!acknowledged) message = 'Something went wrong.';
-
+    if (!acknowledged)
+      message = 'Something went wrong.';
     req.session.messages = [message];
     res.redirect('/dashboard/category/');
   });
 
-/* GET Category update page. */
-router.get('/category/:id', async function (req, res, next) {
-  let category = new Category();
-  category._id = req.params.id;
-  await category.find();
-  res.render('dashboard/categoryUpdate', {
-    title: 'CrytsalIT | Edit Category',
-    category: category,
+/* ROUTE Category update page. */
+router
+  .route('/category/:id')
+  .get(async (req, res) => {
+    let categoryId = req.params.id;
+    let category = await Category.findById(categoryId);
+    res.render('dashboard/category.edit.pug', {
+      title: 'CrytsalIT | Edit Category',
+      role: req.context.user.role,
+      category: category,
+    });
+  })
+  .post(async (req, res,) => {
+    let categoryId = req.params.id;
+    let formCollection = req.body;
+    let category = new Category(formCollection);
+    category._id = categoryId;
+    let acknowledged = await category.update();
+    let message = 'Category updated successfully.'
+    if (!acknowledged)
+      message = 'Something went wrong.';
+    req.session.messages = [message];
+    res.redirect('/dashboard/category/');
   });
-});
-
-/* POST Category update page. */
-router.post('/category/:id', async function (req, res, next) {
-  let category = new Category();
-  category._id = req.params.id;
-  let formCollection = req.body;
-  Object.assign(category, formCollection);
-  let acknowledged = await category.update();
-  let message = 'Category updated successfully.'
-  if (!acknowledged)
-    message = 'Something went wrong.';
-  
-  req.session.messages = [message];
-  res.redirect('/dashboard/category/');
-});
 
 /* Category remove process */
-router.get('/category/remove/:id', async function (req, res, next) {
-  let category = new Category();
-  category._id = req.params.id;
-  let acknowledged = await category.remove();
-  message = 'Category removed successfully.';
+router.get('/category/remove/:id', async (req, res) => {
+  let categoryId = req.params.id;
+  let category = await Category.findById(categoryId);
+  let acknowledged = await category.delete();
+  let message = 'Category removed successfully.';
   if (!acknowledged)
     message = 'Something went wrong.';
-  
   req.session.messages = [message];
   res.redirect('/dashboard/category/');
 });

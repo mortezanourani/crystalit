@@ -1,4 +1,4 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
   h1 ویرایش دسته بندی
@@ -10,8 +10,5 @@ block content
       input(type="text", name="title", placeholder="عنوان دسته بندی", value=category.title)
 
     p 
-      a(href="/dashboard/category/remove/" + category._id)
-        input(type="button", value="حذف")
-      
       input(type="submit", value="به روز رسانی")
       
