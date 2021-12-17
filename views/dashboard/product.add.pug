@@ -1,4 +1,4 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
   h1 اضافه کردن محصول جدید
@@ -17,7 +17,7 @@ block content
     for property in properties
       p 
         label= property.title + ': '
-        input(type= "text", name= property.name, placeholder= "مقدار به " + property.unit)
+        input(type= "text", name="properties", placeholder= "مقدار به " + property.unit)
     
     p 
       input(type="text", name="count", placeholder="تعداد موجود در انبار")

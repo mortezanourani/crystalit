@@ -1,4 +1,4 @@
-extends layout 
+extends ../layout/dashboard
 
 block content 
   h1 ویرایش محصول جدید
@@ -33,8 +33,8 @@ block content
             - value = productProperty.value
             - break
         
-        input(type= "text", name= property.name, placeholder= "مقدار به " + property.unit, value= value)
-
+        input(type= "text", name="properties", placeholder= "مقدار به " + property.unit, value= value)
+        
     p 
       input(type="text", name="count", placeholder="تعداد موجود در انبار", value=product.count)
 

@@ -2,15 +2,8 @@ const PRODUCTS = require('../middlewares/mongoContext').Product;
 const uuid = require('uuid');
 
 class Product {
-  title = new String();
-  categories = new Array(new Category());
-  properties = new Array(new Property());
-  images = new Array(new String());
-  count = new Number();
-  price = new Number();
-  discount = new Number();
-
-  constructor({title, categories, properties, images, count, price, discount}) {
+  constructor({ _id, title, categories, properties, images, count, price, discount }) {
+    this._id = _id;
     this.title = title;
     this.categories = categories;
     this.properties = properties;
@@ -44,21 +37,39 @@ class Product {
     let product = await PRODUCTS.findOne({
       _id: productId
     });
-    return product;
+    return new Product(product);
   }
 
   async save() {
-    let productId = uuid.v1()
+    for (let index in this.categories)
+      delete this.categories[index]._id;
+    
+    for (let index in this.properties)
+      delete this.properties[index]._id;
+    
+    let product = {
+      _id: uuid.v1()
       .split('-')
-      .join('');
-    this._id = productId;
-    let result = await Context.Product.insertOne(this);
-    if (!result)
-      return false;
-    return true;
+        .join(''),
+      title: this.title,
+      categories: this.categories,
+      properties: this.properties,
+      images: this.images,
+      count: this.count,
+      price: this.price,
+      discount: this.discount
+    };
+    let result = await PRODUCTS.insertOne(product);
+    return result.acknowledged;
   }
 
   async update() {
+    for (let index in this.categories)
+      delete this.categories[index]._id;
+
+    for (let index in this.properties)
+      delete this.properties[index]._id;
+
     let set = {
       title: this.title,
       categories: this.categories,
@@ -68,28 +79,15 @@ class Product {
       price: this.price,
       discount: this.discount,
     };
-
-    if (!set.categories)
-      set.categories = new Array(0);
-    
-    if (!set.properties)
-      set.properties = new Array(0);
-    
-    if (!set.images)
-      set.images = new Array(0);
-    
-    let result = await Context.Product.updateOne(
-      { _id: this._id },
+    let result = await PRODUCTS.updateOne(
+      { _id: this._id, },
       { $set: set }
     );
-
-    if (!result)
-      return false;
-    return true;
+    return result.acknowledged;
   }
 
   async delete() {
-    let result = await Context.Product.remove({ _id: this._id });
+    let result = await PRODUCTS.deleteOne({ _id: this._id });
     return result.acknowledged;
   }
 }

@@ -16,6 +16,22 @@ class Property {
     return new Property(property);
   }
 
+  static async findMany(propertyValuesArray) {
+    let properties = [];
+    let propertiesDataArray = await PROPERTIES.find({}).toArray();
+    for (let i in propertiesDataArray) {
+      if (propertyValuesArray[i])
+        properties.push({
+          _id: propertiesDataArray[i]._id,
+          name: propertiesDataArray[i].name,
+          title: propertiesDataArray[i].title,
+          unit: propertiesDataArray[i].unit,
+          value: propertyValuesArray[i],
+        });
+    }
+    return properties;
+  }
+
   static async findAll() {
     let properties = await PROPERTIES.find({}).toArray();
     return properties;

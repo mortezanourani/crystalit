@@ -216,159 +216,120 @@ router.get('/property/remove/:id', async (req, res) => {
   res.redirect('/dashboard/property/');
 });
 
-/* GET Product page. */
-router.get('/product', async function (req, res, next) {
-  let message = res.locals.message;
-  let product = new Product();
-  let products = new Array(0);
-  products = await product.findAll();
-
-  res.render('dashboard/product', {
-    title: 'CrytsalIT | Products',
-    products: products,
-    message: message,
+/* ROUTE Product page. */
+router
+  .route('/product')
+  .get(async (req, res) => {
+    let message = res.locals.message;
+    let products = await Product.find();
+    res.render('dashboard/product', {
+      title: 'CrytsalIT | Products',
+      role: req.context.user.role,
+      products: products,
+      message: message,
+    });
   });
-});
 
-/* GET Product create page. */
-router.get('/product/add', async function (req, res, next) {
-  let category = new Category();
-  let categories = new Array(0);
-  categories = await category.findAll();
+/* ROUTE Product create page. */
+router
+  .route('/product/add')
+  .get(async (req, res) => {
+    let categories = await Category.findAll();
+    let properties = await Property.findAll();
+    res.render('dashboard/product.add.pug', {
+      title: 'CrytsalIT | Create Product',
+      role: req.context.user.role,
+      categories: categories,
+      properties: properties,
+    });
+  })
+  .post(async (req, res) => {
+    let formCollection = req.body;
+    
+    let categoriesIdArray = formCollection.categories;
+    let categories = await Category.findManyById(categoriesIdArray);
 
-  let property = new Property();
-  let properties = new Array(0);
-  properties = await property.findAll();
+    let propertiesValueArray = formCollection.properties;
+    let properties = await Property.findMany(propertiesValueArray);
 
-  res.render('dashboard/productAdd', {
-    title: 'CrytsalIT | Create Product',
-    categories: categories,
-    properties: properties,
+    let images = [];
+
+    let product = new Product({
+      title: formCollection.title,
+      categories,
+      properties,
+      images,
+      count: formCollection.count,
+      price: formCollection.price,
+      discount: formCollection.discount,
+    });
+
+    let acknowledged = await product.save();
+    let message = 'Product created successfully.'
+    if (!acknowledged)
+      message = 'Something went wrong.';
+
+    req.session.messages = [message];
+    res.redirect('/dashboard/product/');
   });
-});
-
-/* POST Product create page. */
-router.post('/product/add', async function (req, res, next) {
-  let formCollection = req.body;
-
-  let product = new Product();
-  product.title = formCollection.title;
-  product.count = formCollection.count;
-  product.price = formCollection.price;
-  product.discount = formCollection.discount;
-  
-  let categories = [];
-  if (typeof formCollection.categories !== 'object')
-    formCollection.categories = [formCollection.categories];
-  for (formCategory of formCollection.categories) {
-    let category = new Category();
-    category._id = formCategory;
-    await category.find();
-    delete category._id;
-    categories.push(category);
-  }
-  product.categories = categories;
-  if (product.categories[0].name === '')
-    delete product.categories;
-
-  let property = new Property();
-  let properties = await property.findAll();
-  for (let property of properties) {
-    if (formCollection[property.name] === '')
-      continue;
-    delete property._id;
-    property.value = formCollection[property.name];
-    product.properties.push(property);
-  }
-  if (product.properties.length === 0)
-    delete product.properties;
-  
-  let acknowledged = await product.create();
-  let message = 'Product created successfully.'
-  if (!acknowledged)
-    message = 'Something went wrong.';
-  
-  req.session.messages = [message];
-  res.redirect('/dashboard/product/');
-});
 
 /* GET Product update page. */
-router.get('/product/:id', async function (req, res, next) {
-  let category = new Category();
-  let categories = new Array(0);
-  categories = await category.findAll();
+router.route('/product/:id')
+  .get(async (req, res) => {
+    let categories = await Category.findAll();
+    let properties = await Property.findAll();
+    let productId = req.params.id;
+    let product = await Product.findById(productId);
+    res.render('dashboard/product.edit.pug', {
+      title: 'CrytsalIT | Edit Product',
+      role: req.context.user.role,
+      categories: categories,
+      properties: properties,
+      product: product,
+    });
+  })
+  .post(async (req, res) => {
+    let productId = req.params.id;
+    let formCollection = req.body;
 
-  let property = new Property();
-  let properties = new Array(0);
-  properties = await property.findAll();
+    let categoriesIdArray = formCollection.categories;
+    let categories = await Category.findManyById(categoriesIdArray);
 
-  let product = new Product();
-  product._id = req.params.id;
-  await product.find();
-  res.render('dashboard/productUpdate', {
-    title: 'CrytsalIT | Edit Product',
-    categories: categories,
-    properties: properties,
-    product: product,
+    let propertiesValueArray = formCollection.properties;
+    let properties = await Property.findMany(propertiesValueArray);
+
+    let images = [];
+
+    let product = new Product({
+      _id: productId,
+      title: formCollection.title,
+      categories,
+      properties,
+      images,
+      count: formCollection.count,
+      price: formCollection.price,
+      discount: formCollection.discount,
+    });
+    let acknowledged = await product.update();
+    let message = 'Product updated successfully.';
+    if (!acknowledged)
+      message = 'Something went wrong.';
+
+    req.session.messages = [message];
+    res.redirect('/dashboard/product/');
+  })
+// Product delete process */
+router
+  .route('/product/remove/:id')
+  .get(async (req, res) => {
+    let productId = req.params.id;
+    let product = await Product.findById(productId);
+    let acknowledged = await product.delete();
+    let message = 'Product removed successfully.';
+    if (!acknowledged)
+      message = 'Something went wrong.';
+    req.session.messages = [message];
+    res.redirect('/dashboard/product/');
   });
-});
-
-/* POST Product update page. */
-router.post('/product/:id', async function (req, res, next) {
-  let formCollection = req.body;
-
-  let product = new Product();
-  product._id = req.params.id;
-  product.title = formCollection.title;
-  product.count = formCollection.count;
-  product.price = formCollection.price;
-  product.discount = formCollection.discount;
-
-  let categories = [];
-  if (typeof formCollection.categories !== 'object')
-    formCollection.categories = [formCollection.categories];
-  for (formCategory of formCollection.categories) {
-    let category = new Category();
-    category._id = formCategory;
-    await category.find();
-    delete category._id;
-    categories.push(category);
-  }
-  product.categories = categories;
-  if (product.categories[0].name === '')
-    delete product.categories;
-
-  let property = new Property();
-  let properties = await property.findAll();
-  for (let property of properties) {
-    if (formCollection[property.name] === '')
-      continue;
-    delete property._id;
-    property.value = formCollection[property.name];
-    product.properties.push(property);
-  }
-  if (product.properties.length === 0)
-    delete product.properties;
-
-  let acknowledged = await product.update();
-  let message = 'Product updated successfully.';
-  if (!acknowledged) message = 'Something went wrong.';
-
-  req.session.messages = [message];
-  res.redirect('/dashboard/product/');
-});
-
-/* Product remove process */
-router.get('/product/remove/:id', async function (req, res, next) {
-  let product = new Product();
-  product._id = req.params.id;
-  let acknowledged = await product.remove();
-  message = 'Product removed successfully.';
-  if (!acknowledged)
-    message = 'Something went wrong.';
-  
-  req.session.messages = [message];
-  res.redirect('/dashboard/product/');
-});
 
 module.exports = router;

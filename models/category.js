@@ -22,6 +22,21 @@ class Category {
     return new Category(category);
   }
 
+  static async findManyById(categoriesIdArray) {
+    let categories = [];
+    if (!categoriesIdArray)
+      return categories;
+    if (typeof categoriesIdArray !== 'object')
+      categoriesIdArray = [categoriesIdArray];
+    for (let categoryId of categoriesIdArray) {
+      let category = await CATEGORIES.findOne({
+        _id: categoryId,
+      });
+      categories.push(category);
+    }
+    return categories;
+  }
+
   static async findAll() {
     let categories = await CATEGORIES.find({}).toArray();
     return categories;
@@ -29,12 +44,10 @@ class Category {
 
   async save() {
     let category = {
-      _id: uuid.v1()
-        .split('-')
-        .join(''),
+      _id: uuid.v1().split('-').join(''),
       name: this.name,
       title: this.title,
-    }
+    };
     let result = await CATEGORIES.insertOne(category);
     return result.acknowledged;
   }
@@ -45,8 +58,8 @@ class Category {
       {
         $set: {
           name: this.name,
-          title: this.title
-        }
+          title: this.title,
+        },
       }
     );
     return result.acknowledged;
