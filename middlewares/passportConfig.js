@@ -18,16 +18,16 @@ passport.use(
   new LocalStrategy(async (username, password, done) => {
     let doesExist = !! await Account.findByUsername(username);
     if (doesExist)
-      return done(null, false, { message: 'Username already exists.' });
+      return done(null, false, { message: 'شما یک حساب کاربری دارید.' });
 
     let isPasswordValid = Account.isPasswordValid(password);
     if (!isPasswordValid)
-      return done(null, false, { message: 'Entered password is not valid.' });
+      return done(null, false, { message: 'رمزعبور وارد شده معتبر نیست.' });
 
     const account = new Account({ username, password });
     let saveResult = await account.save();
     if (!saveResult)
-      return done(null, false, { message: 'Something went wrong.' });
+      return done(null, false, { message: 'خطایی رخ داده است. لطفا مجددا تلاش نمایید.' });
     return done(null, account);
   })
 );
@@ -38,7 +38,7 @@ passport.use(
     const account = await Account.findOne({ username, password });
     if (!account)
       return done(null, false, {
-        message: 'Username/Password is wrong.',
+        message: 'نام کاربری یا رمزعبور صحبح نیست.',
       });
     return done(null, account);
   })

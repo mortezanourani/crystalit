@@ -1,13 +1,22 @@
 extends ../layout/main
 
 block content 
-  h1= 'Login'
-  if(errorMessage)
-    p #{errorMessage}
-  form(action="", method="post") 
-    p
-      input(type="email", name="username" placeholder="نام کاربری")
-    p
-      input(type="password", name="password" placeholder="رمز عبور")
-    p
-      input(type="submit", value="ورود")
+  div(class="login-content")
+    h1(class="cit-mb-title") ورود به حساب کاربری
+    form(action="", method="post") 
+      label(for="username") نام کاربری:
+      input(type="email", id="username", name="username", placeholder="Username")
+
+      label(for="password") رمز عبور:
+      input(type="password", id="password", name="password", placeholder="Password")
+      
+      input(type="submit", id="submit", value="ورود")
+
+    span(class="cit-login-links")
+      a(href="/account/forgotpassword") رمزعبور خود را فراموش کرده اید؟
+      a(href="/account/register") ساخت حساب کاربری جدید
+
+    if errorMessage != ''
+      p(class="error") #{errorMessage}
+    
+

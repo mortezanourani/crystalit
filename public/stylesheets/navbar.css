@@ -1,0 +1,59 @@
+.cit-navbar.main-nav {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #369;
+  align-content: center;
+  height: 58px;
+}
+
+.cit-navbar.main-nav .content {
+  width: 980px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.cit-navbar.main-nav .content .cit-mn-title {
+  font-family: IRANSans;
+  font-weight: 500;
+  font-size: 17pt;
+  text-decoration: none;
+  margin: 0;
+  padding: 15px 0 5px;
+  color: #eef;
+}
+.cit-navbar.main-nav .content .cit-mn-title:hover {
+  border-bottom: 5px solid #eef;
+  padding-bottom: 0px;
+}
+
+.cit-navbar.main-nav .content .menu {
+  list-style: none;
+  display: inline-flex;
+  padding: 0;
+  margin: auto -3px 0;
+  vertical-align: bottom;
+}
+
+.cit-navbar.main-nav .content .item {
+  margin-right: 13px;
+}
+
+.cit-navbar.main-nav .content .item span {
+  display: inline-block;
+  padding: 10px 3px;
+  font-family: IRANSans;
+  font-size: 10.5pt;
+  font-weight: 500;
+  color: #eef;
+}
+
+.cit-navbar.main-nav .content .item:hover span {
+  border-bottom: 5px solid #eef;
+  padding-bottom: 5px;
+}
