@@ -1,0 +1,104 @@
+.cit-body .login-content,
+.cit-body .register-content {
+  position: absolute;
+  width: 350px;
+  height: 500px;
+  overflow: hidden;
+  margin: -225px -175px;
+  top: 50%;
+  left: 50%;
+}
+
+.cit-body .login-content .cit-mb-title,
+.cit-body .register-content .cit-mb-title {
+  margin: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.cit-body .login-content form,
+.cit-body .register-content form {
+  padding: 50px;
+  background-color: #369;
+  border-radius: 7px;
+  margin-bottom: 15px;
+}
+
+.cit-body .login-content form label,
+.cit-body .login-content form input,
+.cit-body .register-content form label,
+.cit-body .register-content form input {
+  border: none;
+  outline: none;
+  display: block;
+  padding: 7px 10px;
+  width: 100%;
+  font-size: 10.5pt;
+  font-weight: 400;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  margin-bottom: 20px;
+  text-align: left;
+  direction: ltr;
+}
+.cit-body .login-content form input:focus,
+.cit-body .register-content form input:focus {
+  background-color: #eef;
+}
+
+.cit-body .login-content form label,
+.cit-body .register-content form label {
+  font-size: 12pt;
+  font-weight: 500;
+  color: #eee;
+  margin-bottom: 0;
+  text-align: right;
+  direction: rtl;
+}
+
+.cit-body .login-content form #submit,
+.cit-body .register-content form #submit {
+  font-size: 12pt;
+  font-weight: 500;
+  color: #369;
+  background-color: #eef;
+  margin-bottom: 0;
+  text-align: center;
+  direction: rtl;
+  transition: all ease 0.3s;
+}
+
+.cit-body .login-content form #submit:focus,
+.cit-body .login-content form #submit:hover,
+.cit-body .register-content form #submit:focus,
+.cit-body .register-content form #submit:hover {
+  background-color: #d7d7e7;
+}
+
+.cit-body .login-content .cit-login-links,
+.cit-body .register-content .cit-register-links {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 10px;
+  font-size: 9pt;
+  font-weight: 200;
+}
+
+.cit-body .login-content .cit-login-links a,
+.cit-body .register-content .cit-register-links a {
+  color: #111;
+  text-decoration: none;
+}
+
+.cit-body .login-content p.error,
+.cit-body .register-content p.error {
+  font-size: 10pt;
+  font-weight: 300;
+  border-radius: 5px;
+  color: red;
+  text-align: center;
+  direction: rtl;
+  border: 1px solid red;
+  padding: 7px;
+}

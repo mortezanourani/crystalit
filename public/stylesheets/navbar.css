@@ -10,7 +10,7 @@
 }
 
 .cit-navbar.main-nav .content {
-  width: 980px;
+  width: 960px;
   margin: auto;
   display: flex;
   flex-wrap: wrap;
@@ -19,17 +19,12 @@
 }
 
 .cit-navbar.main-nav .content .cit-mn-title {
-  font-family: IRANSans;
   font-weight: 500;
   font-size: 17pt;
   text-decoration: none;
   margin: 0;
   padding: 15px 0 5px;
   color: #eef;
-}
-.cit-navbar.main-nav .content .cit-mn-title:hover {
-  border-bottom: 5px solid #eef;
-  padding-bottom: 0px;
 }
 
 .cit-navbar.main-nav .content .menu {
@@ -47,7 +42,6 @@
 .cit-navbar.main-nav .content .item span {
   display: inline-block;
   padding: 10px 3px;
-  font-family: IRANSans;
   font-size: 10.5pt;
   font-weight: 500;
   color: #eef;

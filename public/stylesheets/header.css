@@ -1,0 +1,26 @@
+.cit-header {
+  height: 430px;
+  background-color: gray;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.cit-header .cit-headermenu {
+  background-color: #369;
+  width: 315px;
+  height: 100%;
+}
+
+.cit-header .cit-headermenu .cit-hm-item span {
+  display: block;
+  border-top: 1px solid #eef;
+  color: #eef;
+  padding: 11px 10px;
+  font-weight: 300;
+  font-size: 10pt;
+  text-align: right;
+}
+.cit-header .cit-headermenu .cit-hm-item:hover span {
+  color: #369;
+  background-color: #eef;
+}

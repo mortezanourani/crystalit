@@ -1,17 +1,35 @@
-extends ./layout/main
+doctype html
+html(lang="en" dir="rtl")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/header.css')
+    title کریستال آی تی
+  body 
+    include ./layout/shared/navbar
+    div(class="cit-body")
+      div(class="cit-header")
+        div(class="cit-headermenu")
+          for category in categories 
+            a(class="cit-hm-item" href='/category/'+category.name)
+              span #{category.title}
+        div(class="cit-slider")
 
-block content
-  h1= title
-
-  for product of products
-    span 
-      button 
-        a(href="/product/" + product._id)  
-          h3= product.title
-          p= product.price 
-          p= '-' + product.discount + '%'
-          p= product.price*((1-(product.discount/100)))
-        p
-          for productCategory of product.categories 
-            span
-              a(href="/category/" + productCategory.name)= productCategory.title
+      div(class="cit-swipper")
+        ul(class="swipper-container")
+          li(class="swipper-item title")
+          for product of products
+            li(class="swipper-item")
+              a(href="/product/" + product._id) 
+                div(class="swipper-image")
+                  img(src=product.images[0])
+                div(class="info-wrapper")
+                  h3(class="product-title")= product.title
+                  div(class="price-wrapper")
+                    if(product.discount > 0)
+                      p(class="price")= product.price 
+                      span(class="off")= product.discount + '%'
+                    p(class="price final")= product.price*((1-(product.discount/100))) + " تومان"
+    include ./layout/shared/footer

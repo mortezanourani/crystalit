@@ -2,14 +2,17 @@ var express = require('express');
 var router = express.Router();
 
 const Product = require('../models/product');
+const Category = require('../models/category');
 
 /* GET home page. */
 router
   .get('/', async (req, res) => {
     let products = await Product.find();
+    let categories = await Category.findAll();
     res.render('index', {
       title: 'CrystalIT | Shop',
       products: products,
+      categories: categories,
     });
   });
 

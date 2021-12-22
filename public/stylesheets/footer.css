@@ -1,0 +1,9 @@
+.cit-footer .content {
+  margin: auto;
+  width: 960px;
+  padding: 25px;
+  background-color: #369;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
