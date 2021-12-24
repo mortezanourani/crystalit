@@ -146,6 +146,11 @@ body * {
   direction: rtl;
 }
 
+.page-title {
+  font-weight: 500;
+  color: #111;
+}
+
 a {
   color: #00B7FF;
   text-decoration: none;
