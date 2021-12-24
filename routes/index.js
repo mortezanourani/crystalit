@@ -20,9 +20,12 @@ router
 router
   .get('/category/:name', async (req, res) => {
     let categoryName = req.params.name;
+    let categories = await Category.findAll();
+    let category = await Category.findByName(categoryName);
     let products = await Product.findByCategory(categoryName);
     res.render('category', {
-      title: 'CrystalIT | Shop',
+      title: category.title,
+      categories: categories,
       products: products,
     });
   });

@@ -30,22 +30,28 @@ body * {
   color: #369;
 }
 
-.cit-swipper {
+.cit-swipper,
+.cit-products-wrapper {
   background-color: #369;
   margin-bottom: 15px;
   padding: 25px;
   overflow: hidden;
 }
 
-.cit-swipper .swipper-container {
-  margin: 0 -7px;
+.cit-swipper .swipper-container,
+.cit-products-wrapper .products-container {
+  margin: 0 -7px -15px;
   padding: 0;
 }
+.cit-swipper .swipper-container {
+  width: max-content;
+}
 
-.cit-swipper .swipper-container .swipper-item {
+.cit-swipper .swipper-container .swipper-item,
+.cit-products-wrapper .products-container .product {
   display: inline-block;
   position: relative;
-  margin: 0 7px;
+  margin: 0 7px 15px;
   width: 217px;
   height: 386px;
   background-color: #fff;
@@ -57,7 +63,8 @@ body * {
   background-color: transparent;
 }
 
-.cit-swipper .swipper-container .swipper-item a {
+.cit-swipper .swipper-container .swipper-item a,
+.cit-products-wrapper .products-container .product a {
   display: inherit;
   padding: 15px;
   width: 100%;
@@ -67,32 +74,37 @@ body * {
   -webkit-box-sizing: border-box;
 }
 
-.cit-swipper .swipper-container .swipper-item a .swipper-image {
+.cit-swipper .swipper-container .swipper-item a .swipper-image,
+.cit-products-wrapper .products-container .product a .product-image {
   width: 187px;
   height: 187px;
   border-radius: 7px 7px 0 0;
   overflow: hidden;
 }
 
-.cit-swipper .swipper-container .swipper-item a .swipper-image img {
+.cit-swipper .swipper-container .swipper-item a .swipper-image img,
+.cit-products-wrapper .products-container .product a .product-image img {
   width: 100%;
   height: 100%;
 }
 
-.cit-swipper .swipper-container .swipper-item a .info-wrapper {
+.cit-swipper .swipper-container .swipper-item a .info-wrapper,
+.cit-products-wrapper .products-container .product a .product-info-wrapper {
   height: 154px;
   margin-top: 15px;
   position: relative;
 }
 
-.cit-swipper .swipper-container .swipper-item a .info-wrapper .product-title {
+.cit-swipper .swipper-container .swipper-item a .info-wrapper .product-title,
+.cit-products-wrapper .products-container .product a .product-info-wrapper .title {
   margin: 0px;
   font-size: 12pt;
   font-weight: 500;
   color: #111;
 }
 
-.cit-swipper .swipper-container .swipper-item a .info-wrapper .price-wrapper {
+.cit-swipper .swipper-container .swipper-item a .info-wrapper .price-wrapper,
+.cit-products-wrapper .products-container .product a .product-info-wrapper .price-wrapper {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -101,7 +113,8 @@ body * {
   text-align: left;
 }
 
-.cit-swipper .swipper-container .swipper-item a .info-wrapper .price-wrapper .price {
+.cit-swipper .swipper-container .swipper-item a .info-wrapper .price-wrapper .price,
+.cit-products-wrapper .products-container .product a .product-info-wrapper .price-wrapper .price {
   text-decoration: line-through;
   margin: 0px;
   font-size: 10pt;
@@ -110,7 +123,8 @@ body * {
   color: #111;
 }
 
-.cit-swipper .swipper-container .swipper-item a .info-wrapper .price-wrapper .off {
+.cit-swipper .swipper-container .swipper-item a .info-wrapper .price-wrapper .off,
+.cit-products-wrapper .products-container .product a .product-info-wrapper .price-wrapper .off {
   background: red;
   border-radius: 5px;
   padding: 0px 10px;
@@ -122,7 +136,8 @@ body * {
   vertical-align: super;
 }
 
-.cit-swipper .swipper-container .swipper-item a .info-wrapper .price-wrapper .price.final {
+.cit-swipper .swipper-container .swipper-item a .info-wrapper .price-wrapper .price.final,
+.cit-products-wrapper .products-container .product a .product-info-wrapper .price-wrapper .price.final {
   text-decoration: none;
   margin: 0px;
   font-size: 11pt;

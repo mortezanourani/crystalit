@@ -1,17 +1,27 @@
 extends ./layout/main
 
 block content
+  div(class="cit-navbar cat-nav")
+    ul(class="menu")
+      for category of categories
+        li
+          a(class="item" href="/category/" + category.name) 
+            span= category.title
+  
   h1= title
+  div(class="cit-products-wrapper")
+    div(class="products-container")
+      for product of products
+        div(class="product")
+          a(href="/product/" + product._id) 
+            div(class="product-image")
+              img(src=product.images[0])
+            div(class="product-info-wrapper")
+              h3(class="title")= product.title
+              div(class="price-wrapper")
+                if(product.discount > 0)
+                  p(class="price")= product.price 
+                  span(class="off")= product.discount + '%'
+                p(class="price final")= product.price*((1-(product.discount/100))) + " تومان"
 
-  for product of products
-    span 
-      button 
-        a(href="/product/" + product._id)  
-          h3= product.title
-          p= product.price 
-          p= '-' + product.discount + '%'
-          p= product.price*((1-(product.discount/100)))
-        p
-          for productCategory of product.categories 
-            span
-              a(href="/category/" + productCategory.name)= productCategory.title
+  include ./layout/shared/footer
