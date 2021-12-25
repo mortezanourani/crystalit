@@ -86,6 +86,7 @@ body * {
 .cit-products-wrapper .products-container .product a .product-image img {
   width: 100%;
   height: 100%;
+  background-color: #369;
 }
 
 .cit-swipper .swipper-container .swipper-item a .info-wrapper,
@@ -149,6 +150,106 @@ body * {
 .page-title {
   font-weight: 500;
   color: #111;
+  margin: 20px 0 10px;
+}
+
+.product-wrapper {
+  width: 100%;
+  display: block;
+}
+
+.product-wrapper .product-image {
+  width: 350px;
+  height: 350px;
+  padding: 20px;
+  margin-left: 25px;
+  background-color: #369;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.product-wrapper .product-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  background-color: #eef;
+}
+
+.product-wrapper .product-info {
+  width: 545px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.product-wrapper .product-info * {
+  margin: 0;
+}
+
+.product-wrapper .product-info .info-wrapper {
+  width: 100%;
+}
+
+.product-wrapper .product-info .info-wrapper .price {
+  text-decoration: line-through;
+  margin: 0px;
+  font-size: 10pt;
+  font-weight: 300;
+  display: inline-block;
+  color: #111;
+}
+
+.product-wrapper .product-info .info-wrapper .off {
+  background: red;
+  border-radius: 5px;
+  padding: 0px 10px;
+  margin: 0;
+  margin-right: 7px;
+  color: white;
+  font-size: 10pt;
+  font-weight: 400;
+  vertical-align: super;
+}
+
+.product-wrapper .product-info .info-wrapper .price.final {
+  text-decoration: none;
+  margin: 0px;
+  margin-top: 5px;
+  font-size: 11pt;
+  font-weight: 400;
+  display: block;
+  direction: rtl;
+}
+
+.product-wrapper .product-info .info-wrapper .product-categories {
+  border: 1px solid #999;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 10pt;
+  font-weight: 300;
+  overflow: hidden;
+  margin-top: 25px;
+}
+
+.product-wrapper .product-info .info-wrapper .product-categories a {
+  color: #777;
+  margin-left: 15px;
+}
+
+.product-wrapper .product-info .info-wrapper .product-categories a:hover {
+  color: #111;
+  margin-left: 15px;
+}
+
+.product-wrapper .product-info .add-to-cart {
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  background-color: #369;
+  color: #eef;
+  height: 40px;
+  width: 280px;
+  margin-top: 15px;
+  font-weight: 500;
 }
 
 a {

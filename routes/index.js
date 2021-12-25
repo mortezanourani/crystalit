@@ -36,7 +36,7 @@ router
     let productId = req.params.id;
     let product = await Product.findById(productId);
     res.render('product', {
-      title: 'CrystalIT | Shop',
+      title: product.title,
       product: product,
     });
   });

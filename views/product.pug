@@ -1,19 +1,23 @@
 extends ./layout/main
 
 block content
-  h1= title
+  h1(class="page-title")= title
 
-  form(action="/cart/", method="post") 
+  form(class="product-wrapper", action="/cart/", method="post") 
     input(type="hidden", name="productId", value=product._id)
-    img(src=product.images[0])
-    h2= product.title 
+    div(class="product-image")
+      img(src=product.images[0])
 
-    p= "قیمت: " + product.price 
-    p= "تخفیف: " + product.discount + "%"
-    p= "قیمت قابل پرداخت: " + product.price*((1-(product.discount/100)))
-    for productCategory of product.categories 
-      span 
-        a(href="/category/" + productCategory.name)= productCategory.title 
-      
-    p
-      input(type="submit", value="افزودن به سبد خرید")
+    div(class="product-info")
+      div(class="info-wrapper")
+        if(product.discount > 0)
+          p(class="price")= "قیمت: " + product.price 
+          span(class="off")= product.discount + "%"
+        p(class="price final")= "قیمت قابل پرداخت: " + product.price*((1-(product.discount/100))) + " تومان"
+
+        input(type="submit", class="add-to-cart" value="افزودن به سبد خرید")
+
+        div(class="product-categories")
+          for productCategory of product.categories 
+            span 
+              a(href="/category/" + productCategory.name)= productCategory.title 
