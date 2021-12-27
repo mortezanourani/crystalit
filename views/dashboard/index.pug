@@ -1,5 +1,39 @@
 extends ../layout/dashboard
 
 block content 
-  h1 خوش آمدید
-  
+  div(class="flex")
+    div(class="dashboard-wrapper") 
+      p(class="dashboard-wrapper-title") اطلاعات شخصی
+      p(class="dashboard-wrapper-data-title") نام و نام خانوادگی:
+      p(class="dashboard-wrapper-data-value")= `${information.firstName} ${information.lastName}`
+      hr 
+      p(class="dashboard-wrapper-data-title") تاریخ تولد:
+      p(class="dashboard-wrapper-data-value ltr")= information.birthDate.split('-').join('/')
+      hr 
+      a(class="dashboard-wrapper-button", href="/account/information/")
+        span ویرایش اطلاعات شخصی
+    div(class="dashboard-wrapper space") 
+      p(class="dashboard-wrapper-title") اطلاعات تماس
+      p(class="dashboard-wrapper-data-title") پست الکترونیک:
+      p(class="dashboard-wrapper-data-value ltr")= email
+      hr 
+      p(class="dashboard-wrapper-data-title") تلفن همراه:
+      for phone of information.phoneNumbers
+        p(class="dashboard-wrapper-data-value ltr") #{phone}
+      hr 
+      a(class="dashboard-wrapper-button", href="/account/information/")
+        span ویرایش اطلاعات تماس
+      
+  div(class="dashboard-wrapper")
+    p(class="dashboard-wrapper-title") آدرس ها
+    for address in addresses
+      div(class="dashboard-wrapper-address")
+        p(class="dashboard-wrapper-address-address")= address.address
+        p(class="dashboard-wrapper-address-location")= `${address.province}، ${address.city}`
+        p(class="dashboard-wrapper-address-postal")= address.postalCode
+        p(class="dashboard-wrapper-address-link")
+          a(href=`/account/address/${address._id}`) ویرایش آدرس
+      hr 
+    a(class="dashboard-wrapper-button", href="/account/address/")
+      span مشاهده لیست آدرس ها
+    

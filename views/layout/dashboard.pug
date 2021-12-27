@@ -4,32 +4,34 @@ html(lang="en" dir="rtl")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel='stylesheet', href='/stylesheets/style.css')
-    title= title
+    link(rel='stylesheet', href='/stylesheets/dashboard.css')
+    title پنل مدیریت حساب کاربری
   body 
-    div(class="panel" style="display: inline-block; width: 20%; vertical-align: top; padding-left: 45px;")
-      p 
-        a(href="/dashboard/") بازگشت به داشبورد
-      br
+    include ./shared/navbar
+    div(class="dashboard-body")
+      div(class="dashboard-nav")
+        a(class="panel-title" href="/dashboard/") 
+          span پنل کاربری
+      div(class="dashboard-panel")
+        a(class="panel-item", href="/account/information/")
+          span اطلاعات شخصی
+        a(class="panel-item", href="/account/address/")
+          span آدرس ها
+        a(class="panel-item", href="/dashboard/order/")
+          span سابقه سفارشات
+        a(class="panel-item", href="/account/changepassword/")
+          span تغییر رمزعبور
 
-      p
-        a(href="/account/information/") اطلاعات شخصی
-      p
-        a(href="/account/address/") آدرس ها
-      p
-        a(href="/dashboard/order/") سابقه سفارشات
-      p
-        a(href="/account/changepassword/") تغییر رمزعبور
-      p
-        a(href="/account/logout/") خروج
-      br
+        - if(role.level <= 2)
+          a(class="panel-item", href="/dashboard/category/")
+            span دسته بندی ها
+          a(class="panel-item", href="/dashboard/property/")
+            span لیست ویژگی ها
+          a(class="panel-item", href="/dashboard/product/")
+            span محصولات فروشگاه
 
-      - if(role.level <= 2)
-        p
-          a(href="/dashboard/category/") دسته بندی ها
-        p
-          a(href="/dashboard/property/") لیست ویژگی ها
-        p
-          a(href="/dashboard/product/") محصولات فروشگاه
+        a(class="panel-item", href="/account/logout/")
+          span خروج
 
-    div(class="content" style="display: inline-block;")
-      block content 
+      div(class="dashboard-content")
+        block content 

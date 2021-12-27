@@ -16,6 +16,14 @@ body * {
   font-weight: 300;
 }
 
+.flex {
+  display: flex;
+}
+
+.ltr {
+  direction: ltr;
+}
+
 .cit-body {
   width: 960px;
   margin: 0 auto;

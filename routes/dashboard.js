@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+const Information = require('../models/information');
+const Address = require('../models/address');
 const Category = require('../models/category');
 const Property = require('../models/property');
 const Product = require('../models/product');
@@ -14,10 +16,15 @@ router.use((req, res, next) => {
 });
 
 /* GET Dashboard page. */
-router.get('/', function (req, res, next) {
+router.get('/', async (req, res) => {
+  let information = await Information.findByUserId();
+  let addresses = await Address.findByUserId();
   res.render('dashboard/index', {
-    title: 'CrystalIT | Dashboard',
+    title: 'پنل کاربری',
     role: req.context.user.role,
+    email: req.user.username,
+    information: information,
+    addresses: addresses,
   });
 });
 

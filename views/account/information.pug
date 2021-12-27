@@ -1,22 +1,28 @@
 extends ../layout/dashboard 
 
 block content 
-  h1= 'Personal Information'
+  h1= 'اطلاعات شخصی'
   if(errorMessage)
     p #{errorMessage}
   
   form(action="", method="post") 
-    p
-      input(type="text", name="firstName" placeholder="نام" value=information.firstName)
-    p
-      input(type="text", name="lastName" placeholder="نام خانوادگی" value=information.lastName)
-    p
-      input(type="date", name="birthDate" value=information.birthDate)
-    for phoneNumber in information.phoneNumbers
+    div(class="dashboard-wrapper")
       p
-        input(type="text", name="phoneNumbers" placeholder="شماره تماس" value=phoneNumber)
-    p
-      input(type="text", name="phoneNumbers" placeholder="شماره تماس")
-        
+        label(class="input-label", for="firstName") نام: 
+        input(type="text", name="firstName" placeholder="نام" value=information.firstName)
+      p
+        label(class="input-label", for="lastName") نام خانوادگی: 
+        input(type="text", name="lastName" placeholder="نام خانوادگی" value=information.lastName)
+      p
+        label(class="input-label", for="birthDate") تاریخ تولد: 
+        input(type="date", name="birthDate" value=information.birthDate)
+    div(class="input-wrapper")
+      label(for="phoneNumbers") شماره های تماس: 
+      for phoneNumber in information.phoneNumbers
+        p
+          input(type="text", name="phoneNumbers" placeholder="شماره تماس" value=phoneNumber)
+      p
+        input(type="text", name="phoneNumbers" placeholder="شماره تماس")
+          
     p
       input(type="submit", value="ثبت")
