@@ -104,6 +104,8 @@ router
     }
 
     let newPassword = req.body.newPassword;
+    if (newPassword[0] === newPassword[1])
+      newPassword = newPassword[0];
     if (!Account.isPasswordValid(newPassword)) {
       // Return the invalid password error.
       return res.redirect('/account/changepassword/');
