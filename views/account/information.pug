@@ -1,28 +1,27 @@
 extends ../layout/dashboard 
 
 block content 
-  h1= 'اطلاعات شخصی'
   if(errorMessage)
     p #{errorMessage}
   
   form(action="", method="post") 
-    div(class="dashboard-wrapper")
-      p
-        label(class="input-label", for="firstName") نام: 
-        input(type="text", name="firstName" placeholder="نام" value=information.firstName)
-      p
-        label(class="input-label", for="lastName") نام خانوادگی: 
-        input(type="text", name="lastName" placeholder="نام خانوادگی" value=information.lastName)
-      p
-        label(class="input-label", for="birthDate") تاریخ تولد: 
-        input(type="date", name="birthDate" value=information.birthDate)
-    div(class="input-wrapper")
-      label(for="phoneNumbers") شماره های تماس: 
+    h1(class="dashboard-input-title") اطلاعات شخصی
+    div(class="dashboard-input-wrapper")
+      label(class="dashboard-input-label") نام و نام خانوادگی:
+      input(class="dashboard-input", name="firstName", type="text", placeholder="نام", value=information.firstName)
+      hr 
+      input(class="dashboard-input", name="lastName", type="text", placeholder="نام خانوادگی", value=information.lastName)
+
+    div(class="dashboard-input-wrapper")
+      label(class="dashboard-input-label") تاریخ تولد:
+      input(class="dashboard-input", name="birthDate", type="date", value=information.birthDate)
+    
+    h1(class="dashboard-input-title") اطلاعات تماس
+    div(class="dashboard-input-wrapper")
+      label(class="dashboard-input-label", for="phoneNumbers") شماره های تماس: 
       for phoneNumber in information.phoneNumbers
-        p
-          input(type="text", name="phoneNumbers" placeholder="شماره تماس" value=phoneNumber)
-      p
-        input(type="text", name="phoneNumbers" placeholder="شماره تماس")
-          
-    p
-      input(type="submit", value="ثبت")
+        input(class="dashboard-input", type="text", name="phoneNumbers", placeholder="شماره تماس", value=phoneNumber)
+        hr
+      input(class="dashboard-input", type="text", name="phoneNumbers", placeholder="شماره تماس جدید")
+    
+    input(class="dashboard-submit-button", type="submit", value="به روز رسانی")
