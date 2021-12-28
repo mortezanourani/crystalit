@@ -1,19 +1,25 @@
 extends ../layout/dashboard
 
 block content 
-  h1= 'Addresses'
   form(action="", method="post") 
-    p 
-      input(type="text", name="province", placeholder="استان", value=address.province)
-    p 
-      input(type="text", name="city", placeholder="شهر", value=address.city)
-    p 
-      input(type="text", name="street", placeholder="خیابان", value=address.street)
-    p 
-      input(type="text", name="address", placeholder="کوچه، پلاک، واحد", value=address.address)
-    p 
-      input(type="text", name="postalCode", placeholder="کد پستی", value=address.postalCode)
-
-    p 
-      input(type="submit", value="به روز رسانی")
+    h1(class="dashboard-input-title") ویرایش آدرس
+    div(class="flex")
+      div(class="dashboard-input-wrapper")
+        label(class="dashboard-input-label") استان:
+        input(class="dashboard-input", name="province", type="text", placeholder="استان", value=address.province)
+        hr 
+        label(class="dashboard-input-label") شهرستان:
+        input(class="dashboard-input", name="city", type="text", placeholder="شهرستان", value=address.city)
+      div(class="dashboard-input-wrapper")
+          label(class="dashboard-input-label") خیابان:
+          input(class="dashboard-input", name="street", type="text", placeholder="خیابان", value=address.street)
+          hr 
+          label(class="dashboard-input-label") کد پستی:
+          input(class="dashboard-input ltr", name="postalCode", type="text", placeholder="کد پستی", value=address.postalCode)
+    div(class="dashboard-input-wrapper full")
+      label(class="dashboard-input-label") جزئیات آدرس:
+      input(class="dashboard-input", name="address", type="text", placeholder="آدرس", value=address.address)
+    
+    div(class="dashboard-address-wrapper-link")
+      input(class="dashboard-submit-button", type="submit", value="به روز رسانی")
       

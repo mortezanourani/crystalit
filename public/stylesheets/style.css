@@ -24,6 +24,14 @@ body * {
   direction: ltr;
 }
 
+.red {
+  color: #f00 !important;
+}
+
+.full {
+  width: 100% !important;
+} 
+
 .cit-body {
   width: 960px;
   margin: 0 auto;

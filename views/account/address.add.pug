@@ -1,18 +1,24 @@
 extends ../layout/dashboard
 
 block content 
-  h1= 'Addresses'
   form(action="", method="post") 
-    p 
-      input(type="text", name="province", placeholder="استان")
-    p 
-      input(type="text", name="city", placeholder="شهر")
-    p 
-      input(type="text", name="street", placeholder="خیابان")
-    p 
-      input(type="text", name="address", placeholder="کوچه، پلاک، واحد")
-    p 
-      input(type="text", name="postalCode", placeholder="کد پستی")
-
-    p 
-      input(type="submit", value="اضافه کردن آدرس")
+    h1(class="dashboard-input-title") آدرس جدید
+    div(class="flex")
+      div(class="dashboard-input-wrapper")
+        label(class="dashboard-input-label") استان:
+        input(class="dashboard-input", name="province", type="text", placeholder="استان")
+        hr 
+        label(class="dashboard-input-label") شهرستان:
+        input(class="dashboard-input", name="city", type="text", placeholder="شهرستان")
+      div(class="dashboard-input-wrapper")
+          label(class="dashboard-input-label") خیابان:
+          input(class="dashboard-input", name="street", type="text", placeholder="خیابان")
+          hr 
+          label(class="dashboard-input-label") کد پستی:
+          input(class="dashboard-input ltr", name="postalCode", type="text", placeholder="کد پستی")
+    div(class="dashboard-input-wrapper full")
+      label(class="dashboard-input-label") جزئیات آدرس:
+      input(class="dashboard-input", name="address", type="text", placeholder="آدرس")
+    
+    div(class="dashboard-address-wrapper-link")
+      input(class="dashboard-submit-button", type="submit", value="ثبت آدرس جدید")

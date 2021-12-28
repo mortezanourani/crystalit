@@ -27,11 +27,11 @@ block content
   div(class="dashboard-wrapper")
     p(class="dashboard-wrapper-title") آدرس ها
     for address in addresses
-      div(class="dashboard-wrapper-address")
-        p(class="dashboard-wrapper-address-address")= address.address
-        p(class="dashboard-wrapper-address-location")= `${address.province}، ${address.city}`
-        p(class="dashboard-wrapper-address-postal")= address.postalCode
-        p(class="dashboard-wrapper-address-link")
+      div(class="dashboard-address-wrapper")
+        p(class="dashboard-address-address")= `${address.street}، ${address.address}`
+        p(class="dashboard-address-location")= `${address.province}، ${address.city}`
+        p(class="dashboard-address-postal")= address.postalCode
+        p(class="dashboard-address-wrapper-link")
           a(href=`/account/address/${address._id}`) ویرایش آدرس
       hr 
     a(class="dashboard-wrapper-button", href="/account/address/")

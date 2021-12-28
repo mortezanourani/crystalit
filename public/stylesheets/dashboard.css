@@ -38,7 +38,7 @@
 }
 
 .dashboard-content {
-  margin: 51px 315px 50px 0;
+  margin: 51px 315px 25px 0;
   padding: 0 35px;
   width: 100%;
   display: block;
@@ -119,46 +119,64 @@
   background-color: #eef;
 }
 
-.dashboard-wrapper-address {
+.dashboard-address-wrapper {
   padding: 25px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+}
+.dashboard-wrapper .dashboard-address-wrapper {
+  border: none;
 }
 
-.dashboard-wrapper-address-postal,
-.dashboard-wrapper-address-address,
-.dashboard-wrapper-address-location {
+.dashboard-address-postal,
+.dashboard-address-address,
+.dashboard-address-location {
   margin: 0;
 }
 
-.dashboard-wrapper-address-address {
+.dashboard-address-address {
   margin-bottom: 10px;
   font-weight: 500;
   font-size: 13.5pt;
   color: #333;
 }
 
-.dashboard-wrapper-address-postal,
-.dashboard-wrapper-address-location {
+.dashboard-address-postal,
+.dashboard-address-location {
   margin-bottom: 5px;
   font-size: 11pt;
   font-weight: 300;
   color: #777;
 }
 
-.dashboard-wrapper-address-postal {
+.dashboard-address-postal {
   margin: 0;
 }
 
-.dashboard-wrapper-address-link {
+.dashboard-address-wrapper-link {
   margin: 0;
   margin-top: 10px;
   text-align: left;
 }
-.dashboard-wrapper-address-link a {
+.dashboard-address-wrapper-link a {
   font-size: 9.5pt;
   font-weight: 400;
+  margin-right: 10px;
 }
-.dashboard-wrapper-address-link a:hover {
+.dashboard-address-wrapper-link a:hover {
   text-decoration: underline;
+}
+
+.dashboard-address-wrapper-last {
+  padding: 25px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+.dashboard-address-wrapper-last span {
+  font-weight: 300;
+  font-size: 11pt;
+  color: #777;
 }
 
 .dashboard-input-title {

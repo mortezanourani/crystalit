@@ -1,19 +1,23 @@
 extends ../layout/dashboard
 
 block content 
-  h1= 'Addresses'
   if(errorMessage)
     p #{errorMessage}
 
+  h1(class="dashboard-input-title") آدرس ها
   if(addresses.length >= 1)
-    for address of addresses
-      p #{address.province}, #{address.city}, #{address.street}, #{address.address}, کدپستی #{address.postalCode}
-        span 
-          a(href="/account/address/" + address._id) ویرایش
-        span 
-          a(href="/account/address/remove/" + address._id) حذف
+    for address in addresses
+      div(class="dashboard-address-wrapper")
+        p(class="dashboard-address-address")= `${address.street}، ${address.address}`
+        p(class="dashboard-address-location")= `${address.province}، ${address.city}`
+        p(class="dashboard-address-postal")= address.postalCode
+        p(class="dashboard-address-wrapper-link")
+          a(href=`/account/address/${address._id}`) ویرایش آدرس 
+          a(class="red", href=`/account/address/remove/${address._id}`) حذف آدرس
   else
     p هنوز آدرسی ثبت نکرده اید.
 
-  p آیا مایلید آدرس جدیدی ثبت نمایید؟
-  a(href="/account/address/add/") ثبت آدرس جدید
+  div(class="dashboard-address-wrapper-last")
+    span آیا مایلید آدرس جدیدی ثبت نمایید؟ 
+    a(href="/account/address/add/") اینجا 
+    span کلیک کنید.
