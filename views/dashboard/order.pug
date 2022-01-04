@@ -1,19 +1,66 @@
 extends ../layout/dashboard
 
 block content 
-  h1 سفارشات
-  
-  if(message)
+  if(message.length > 0)
     p #{message}
 
   if(orders)
-    for order of orders
-      a(href="/dashboard/order/" + order._id)= order._id
+    h1(class="dashboard-input-title") سفارشات
+    //- for order in orders
+    //-   div(class="dashboard-address-wrapper")
+    //-     - let address = order.address
+    //-     p(class="dashboard-address-address")= `ارسال به آدرس ${address.province}، ${address.city}، ${address.address}`
+    //-     - let price = 0
+    //-     for item of order.items 
+    //-       - price += item.price * (1 - (item.discount / 100))
+    //-       p(class="dashboard-address-address")= `${item.title}`
+    //-       p(class="dashboard-address-location")= `${item.price * (1 - (item.discount / 100))}`
+    //-     p(class="dashboard-address-location")= `${order.address}`
+    //-     p(class="dashboard-address-postal")= order.accountId 
+    //-     p(class="dashboard-address-postal")= order.discount 
+    //-     - let status = order.status[order.status.length - 1];
+    //-     p(class="dashboard-address-postal red")= status.title
+    //-     p(class="dashboard-address-postal")= price
+    //-     p(class="dashboard-address-wrapper-link")
+    //-       a(href=`/account/address/${order._id}`) ویرایش آدرس 
+    div(class="dashboard-orders-wrapper")
+      for order of orders
+        div(class="dashboard-orders-order", href=`/dashboard/order/${order._id}`)
+          span(class="dashboard-orders-order-title")= `سفارش شماره ${order._id.toUpperCase()}`
+          for product in order.items 
+            img(class="dashboard-orders-order-product-image")
+          p(class="dashboard-orders-order-link")
+            a(href=`/dashboard/order/${order._id}`) نمایش سفارش
   else 
-    -let address = order.address
-    p= address.province + " - " + address.city + " - " + address.address 
-    p= order.phoneNumber
-    for item of order.items
-      p= item.title 
-    -let status = order.status[order.status.length-1].title;
-    p= status
+    div(class="dashboard-order-wrapper")
+      h1(class="dashboard-order-number")= `سفارش شماره ${order._id.toUpperCase()}`
+
+      div(class="dashboard-order-address")
+        -let address = order.address
+        p(class="dashboard-order-address-location")= `${address.province}، ${address.city}`
+        p(class="dashboard-order-address-address")= `${address.address}، کد پستی ${address.postalCode}`
+        p(class="dashboard-order-customer")= `تحویل گیرنده: ${order.customer} - ${order.phoneNumber}`
+
+      div(class="dashboard-order-products-wrapper")
+        for product of order.items
+          a(class="dashboard-order-product-wrapper", href=`/product/${product.productId}`)
+            img(class="dashboard-order-product-image", src='/product.images[0]') 
+            div(class="dashboard-order-product-information")
+              p(class="dashboard-order-product-title")= product.title 
+              p(class="dashboard-order-product-price")= `قیمت محصول: ${product.price * (100-product.discount)}` 
+      
+      div(class="dashboard-order-status-wrapper")
+        - let status = order.status[order.status.length-1];
+        //- - let date = new Date(status.date);
+        //- - let year = date.getFullYear();
+        //- - let month = date.getMonth() + 1;
+        //- - let day = date.getDay();
+        //- - let hour = date.getHours();
+        //- - let minute = date.getMinutes();
+        div(class="dashboard-order-status")
+          p(class="dashboard-order-status-title")
+            span= status.title 
+            - if(status.step == 1)
+              a(href="/dashboard/order/pay") 
+                span پرداخت
+          //- p(class="dashboard-order-status-datetime")= `${year}/${month}/${day} ${hour}:${minute}`

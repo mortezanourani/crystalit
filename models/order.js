@@ -1,4 +1,5 @@
 const Address = require('./address');
+const Account = require('./account');
 const Item = require('./item');
 
 const ORDERS = require('../middlewares/mongoContext').Order;
@@ -14,9 +15,10 @@ const Status = {
 const uuid = require('uuid');
 
 class Order {
-  constructor({ _id, accountId, address, phoneNumber, items, discount, status }) {
+  constructor({ _id, accountId, customer, address, phoneNumber, items, discount, status }) {
     this._id = _id;
     this.accountId = accountId || this._context.userId;
+    this.customer = customer || '';
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.items = items;
@@ -32,6 +34,7 @@ class Order {
     let result = await ORDERS.find({
       accountId: userId,
     }).toArray();
+    console.log('oka?');
     return result;
   }
 
@@ -50,9 +53,11 @@ class Order {
       .join('');
     this._id = orderId;
 
+    let account = await Account.findById(this.accountId);
     let result = await ORDERS.insertOne({
       _id: this._id,
-      accountId: this.accountId,
+      accountId: account._id,
+      customer: `${account.personalInfo.firstName} ${account.personalInfo.lastName}`,
       address: this.address,
       phoneNumber: this.phoneNumber,
       items: this.items,

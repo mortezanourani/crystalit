@@ -71,12 +71,13 @@ router.route('/checkout')
     let cartItems = [];
     for (item of cart) {
       let product = await Product.findById(item.productId);
-      cartItems.push({
-        productId: product._id,
-        title: product.title,
-        price: product.price,
-        discount: product.discount,
-      });
+      // cartItems.push({
+      //   productId: product._id,
+      //   title: product.title,
+      //   price: product.price,
+      //   discount: product.discount,
+      // });
+      cartItems.push(product);
     }
     res.render('cart/checkout', {
       title: "CrystalIT | Cart Checkout",
