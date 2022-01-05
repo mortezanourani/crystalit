@@ -1,19 +1,37 @@
 extends ../layout/dashboard
 
 block content 
-  h1 دسته بندی ها
-  if(message)
-    p #{message}
+  if(categories)
+    h1(class="dashboard-input-title") دسته بندی ها
+    if(message.length > 0)
+      p #{message}
+    div(class="dashboard-categories-wrapper")
+      for category of categories
+        div(class="dashboard-categories-category")
+          p(class="dashboard-categories-category-title")= category.title 
+          p(class="dashboard-categories-category-name")= category.name 
+          div(class="dashboard-categories-category-links") 
+            a(href=`/dashboard/category/${category._id}`)
+              span ویرایش
+            a(class="red", href=`/dashboard/category/remove/${category._id}`) 
+              span حذف
 
-  if(categories.length >= 1)
-    for category of categories
-      p #{category.title} 
-        span 
-          a(href="/dashboard/category/" + category._id) ویرایش
-        span 
-          a(href="/dashboard/category/remove/" + category._id) حذف
-  else
-    p هنوز دسته بندی نساخته اید.
+      form(class="dashboard-categories-category", action="/dashboard/category/add", method="post") 
+        p(class="dashboard-categories-category-title") 
+          input(type="text", name="title", placeholder="عنوان فارسی دسته")
+        p(class="dashboard-categories-category-name") 
+          input(type="text", name="name", placeholder="نام انگلیسی")
 
-  p آیا مایلید دسته جدیدی برای دسته بندی محصولاتتان ایجاد نمایید؟
-  a(href="/dashboard/category/add/") اضافه کردن دسته بندی  
+        div(class="dashboard-categories-category-links") 
+          input(class="dashboard-categories-cateogry-submit", type="submit", value="اضافه کردن دسته")
+  else 
+    form(action="", method="post") 
+      h1(class="dashboard-input-title")= `ویرایش دسته ${category.title}` 
+      div(class="dashboard-input-wrapper")
+        label(class="dashboard-input-label", for="title") عنوان دسته بندی:
+        input(class="dashboard-input", type="text", name="title", placeholder="عنوان دسته بندی", value=category.title)
+        hr
+        label(class="dashboard-input-label", for="title") نام انگلیسی:
+        input(class="dashboard-input ltr", type="text", name="name", placeholder="نام انگلیسی جهت ایجاد لینک", value=category.name)
+
+      input(class="dashboard-submit-button", type="submit", value="به روز رسانی")

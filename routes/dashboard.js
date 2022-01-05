@@ -101,7 +101,7 @@ router.get('/category', async (req, res) => {
 /* ROUTE Category create page. */
 router
   .route('/category/add')
-  .get(function (req, res, next) {
+  .get((req, res) => {
     res.render('dashboard/category.add.pug', {
       title: 'CrytsalIT | Create Category',
       role: req.context.user.role,
@@ -124,7 +124,7 @@ router
   .get(async (req, res) => {
     let categoryId = req.params.id;
     let category = await Category.findById(categoryId);
-    res.render('dashboard/category.edit.pug', {
+    res.render('dashboard/category', {
       title: 'CrytsalIT | Edit Category',
       role: req.context.user.role,
       category: category,
