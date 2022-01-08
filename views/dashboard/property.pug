@@ -1,20 +1,44 @@
 extends ../layout/dashboard
 
 block content 
-  h1 ویژگی ها
-  
-  if(message)
-    p #{message}
+  if(properties)
+    h1(class="dashboard-input-title") ویژگی ها
+    if(message.length > 0)
+      p #{message}
+    div(class="dashboard-properties-wrapper")
+      for property of properties 
+        div(class="dashboard-properties-property")
+          p(class="dashboard-properties-property-title")= property.title 
+            - if(property.unit)
+              span(class="dashboard-properties-property-unit")= ` (${property.unit})` 
+          p(class="dashboard-properties-property-name")= property.name 
+          div(class="dashboard-properties-property-links") 
+            a(href=`/dashboard/property/${property._id}`)
+              span ویرایش
+            a(class="red", href=`/dashboard/property/remove/${property._id}`) 
+              span حذف
 
-  if(properties.length >= 1)
-    for property of properties
-      p #{property.title}
-        span 
-          a(href="/dashboard/property/" + property._id) ویرایش
-        span 
-          a(href="/dashboard/property/remove/" + property._id) حذف
-  else
-    p هنوز ویژگی ای اضافه نکرده اید.
+      form(class="dashboard-properties-property", action="", method="post") 
+        p(class="dashboard-properties-property-title") 
+          input(type="text", name="title", placeholder="عنوان فارسی")
+        p(class="dashboard-properties-property-unit") 
+          input(type="text", name="unit", placeholder="واحد اندازه گیری")
+        p(class="dashboard-properties-property-name") 
+          input(type="text", name="name", placeholder="نام انگلیسی")
 
-  p آیا مایلید ویژگی جدیدی برای مشخصات محصولاتتان ایجاد نمایید؟
-  a(href="/dashboard/property/add/") ایجاد ویژگی جدید  
+        div(class="dashboard-properties-property-links") 
+          input(class="dashboard-properties-property-submit", type="submit", value="اضافه کردن ویژگی")
+  else 
+    form(action="", method="post") 
+      h1(class="dashboard-input-title")= `ویرایش دسته ${property.title}` 
+      div(class="dashboard-input-wrapper")
+        label(class="dashboard-input-label", for="title") عنوان دسته بندی:
+        input(class="dashboard-input", type="text", name="title", placeholder="عنوان دسته بندی", value=property.title)
+        hr
+        label(class="dashboard-input-label", for="unit") واحد اندازه گیری:
+        input(class="dashboard-input", type="text", name="unit", placeholder="واحد اندازه گیری", value=property.unit)
+        hr
+        label(class="dashboard-input-label", for="name") نام انگلیسی:
+        input(class="dashboard-input ltr", type="text", name="name", placeholder="نام انگلیسی جهت ایجاد فیلتر", value=property.name)
+
+      input(class="dashboard-submit-button", type="submit", value="به روز رسانی")

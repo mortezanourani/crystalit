@@ -16,7 +16,7 @@ block content
             a(class="red", href=`/dashboard/category/remove/${category._id}`) 
               span حذف
 
-      form(class="dashboard-categories-category", action="/dashboard/category/add", method="post") 
+      form(class="dashboard-categories-category", action="", method="post") 
         p(class="dashboard-categories-category-title") 
           input(type="text", name="title", placeholder="عنوان فارسی دسته")
         p(class="dashboard-categories-category-name") 
@@ -31,7 +31,7 @@ block content
         label(class="dashboard-input-label", for="title") عنوان دسته بندی:
         input(class="dashboard-input", type="text", name="title", placeholder="عنوان دسته بندی", value=category.title)
         hr
-        label(class="dashboard-input-label", for="title") نام انگلیسی:
+        label(class="dashboard-input-label", for="name") نام انگلیسی:
         input(class="dashboard-input ltr", type="text", name="name", placeholder="نام انگلیسی جهت ایجاد لینک", value=category.name)
 
       input(class="dashboard-submit-button", type="submit", value="به روز رسانی")

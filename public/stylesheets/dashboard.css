@@ -371,6 +371,7 @@
 .dashboard-categories-category {
   margin: 0;
   width: 50%;
+  height: 105px;
   padding: 25px;
   padding-bottom: 15px;
   display: inline-block;
@@ -399,10 +400,6 @@
   text-align: left;
   font-weight: 200;
 }
-.dashboard-categories-category .dashboard-categories-category-message {
-  width: 100%;
-  font-weight: 300;
-}
 
 .dashboard-categories-category form {
   margin: 0;
@@ -428,6 +425,89 @@
 
 .dashboard-categories-category-links a:hover,
 .dashboard-categories-category-links input:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/*  */
+/*  */
+/*  */
+.dashboard-properties-wrapper {
+  padding: 0px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.dashboard-properties-property {
+  margin: 0;
+  width: 50%;
+  height: 105px;
+  padding: 25px;
+  display: inline-block;
+  padding-bottom: 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.dashboard-properties-property:nth-child(odd) {
+  border-left: 1px solid #ccc;
+}
+.dashboard-properties-property:last-child:nth-last-child(1) {
+  border-bottom: 0;
+}
+
+.dashboard-properties-property p {
+  margin: 0;
+  width: 50%;
+  font-weight: 400;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.dashboard-properties-property .dashboard-properties-property-name,
+.dashboard-properties-property .dashboard-properties-property-name * {
+  text-align: left;
+  font-weight: 200;
+}
+
+.dashboard-properties-property .dashboard-properties-property-unit,
+.dashboard-properties-property .dashboard-properties-property-unit * {
+  text-align: right;
+  font-weight: 200;
+  font-size: 10pt;
+}
+
+form.dashboard-properties-property {
+  margin: 0;
+}
+form.dashboard-properties-property p {
+  width: 33.33333%;
+}
+form.dashboard-properties-property p.dashboard-properties-property-unit {
+  text-align: center;
+}
+.dashboard-properties-property p input {
+  width: 97%;
+}
+
+.dashboard-properties-property-links {
+  text-align: left;
+}
+.dashboard-properties-property-links a,
+.dashboard-properties-property-links input {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #00B7FF;
+  margin-right: 5px;
+  font-weight: 300;
+  font-size: 9.5pt;
+}
+
+.dashboard-properties-property-links a:hover,
+.dashboard-properties-property-links input:hover {
   text-decoration: underline;
   cursor: pointer;
 }

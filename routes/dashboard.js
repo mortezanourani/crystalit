@@ -85,26 +85,18 @@ router.get('/order/:id', async (req, res) => {
   });
 });
 
-/* GET Category page. */
-router.get('/category', async (req, res) => {
-  let message = res.locals.message;
-  let categories = await Category.findAll();
-
-  res.render('dashboard/category', {
-    title: 'CrytsalIT | Categories',
-    role: req.context.user.role,
-    categories: categories,
-    message: message,
-  });
-});
-
-/* ROUTE Category create page. */
+/* ROUTE Category page. */
 router
-  .route('/category/add')
-  .get((req, res) => {
-    res.render('dashboard/category.add.pug', {
-      title: 'CrytsalIT | Create Category',
+  .route('/category')
+  .get(async (req, res) => {
+    let message = res.locals.message;
+    let categories = await Category.findAll();
+
+    res.render('dashboard/category', {
+      title: 'CrytsalIT | Categories',
       role: req.context.user.role,
+      categories: categories,
+      message: message,
     });
   })
   .post(async (req, res) => {
@@ -112,8 +104,7 @@ router
     let category = new Category(formCollection);
     let acknowledged = await category.save();
     let message = 'Category created successfully.';
-    if (!acknowledged)
-      message = 'Something went wrong.';
+    if (!acknowledged) message = 'Something went wrong.';
     req.session.messages = [message];
     res.redirect('/dashboard/category/');
   });
@@ -155,7 +146,8 @@ router.get('/category/remove/:id', async (req, res) => {
 });
 
 /* ROUTE Property page. */
-router.route('/property')
+router
+  .route('/property')
   .get(async (req, res) => {
     let message = res.locals.message;
     let properties = await Property.findAll();
@@ -164,16 +156,6 @@ router.route('/property')
       role: req.context.user.role,
       properties: properties,
       message: message,
-    });
-  });
-
-/* ROUTE Property create page. */
-router
-  .route('/property/add')
-  .get((req, res) => {
-    res.render('dashboard/property.add.pug', {
-      title: 'CrytsalIT | Create Property',
-      role: req.context.user.role,
     });
   })
   .post(async (req, res) => {
@@ -193,7 +175,7 @@ router
   .get(async (req, res) => {
     let propertyId = req.params.id;
     let property = await Property.findById(propertyId);
-    res.render('dashboard/property.edit.pug', {
+    res.render('dashboard/property', {
       title: 'CrytsalIT | Edit Property',
       role: req.context.user.role,
       property: property,
