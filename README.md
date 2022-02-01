@@ -13,7 +13,6 @@ Author:
 Morteza Nourani
 
 URL:
-http://crystalit.ir/
 https://crystalit.herokuapp.com/
 	
 # Dependencies
